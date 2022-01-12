@@ -144,6 +144,10 @@
     <ClCompile Include="instructionFetch.c" />
     <ClCompile Include="MiniMachine.c" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="instruction.h" />
+    <ClInclude Include="token.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
