@@ -1,4 +1,5 @@
 #include "stdio.h"
+#include "string.h"
 #include "instruction.h"
 #include "token.h"
 
@@ -148,23 +149,29 @@ struct Token* tokenize(char* input) {
 
 		// If character is whitespace:
 		if (input[i] == ' ') {
+			printf("Whitespace at %d\n", i);
 			// If buffer contains characters:
 			if (bufferSize > 0) {
 				// Create token based on type
 				if (bufferIsNum && !bufferIsSym) {
+					printf("Token made with buffer: %s\n", buffer);
 					currentToken = createtoken(buffer, bufferSize, TOKEN_NUM, chartoint(buffer));
 				}
 				else if (bufferIsSym && !bufferIsNum) {
+					printf("Token made with buffer: %s\n", buffer);
 					currentToken = createtoken(buffer, bufferSize, TOKEN_SYM, 0);
 				}
 				else {
 					printf("Error: buffer is non-empty but is neither number nor symbol\n");
 				}
 
-				bufferIsNum = bufferIsSym = 0;
+				bufferIsNum = bufferIsSym = bufferSize = 0;
+				free(buffer);
+				buffer = NULL;
 
 				// Record as first token if applicable
 				if (firstToken == NULL) {
+					printf("This is the first token\n");
 					firstToken = currentToken;
 					prevToken = currentToken;
 				}
@@ -179,9 +186,11 @@ struct Token* tokenize(char* input) {
 		}
 		// If character is alpha:
 		else if ((ASCII_A <= input[i] && input[i] <= ASCII_Z) || (ASCII_A_CAP <= input[i] && input[i] <= ASCII_Z_CAP)) {
+			printf("'%c' at %d\n", input[i], i);
 			// If numbers were read
 			if (bufferIsNum) {
 				// Throw error, clear buffer, reset bools
+				printf("Error: alpha read and buffer has numbers\n");
 				bufferIsNum = bufferIsSym = bufferSize = 0;
 				free(buffer);
 				break;
@@ -192,12 +201,15 @@ struct Token* tokenize(char* input) {
 				buffer = append(buffer, input[i]);
 				bufferSize++;
 			}
+			printf("Buffer: %s\n", buffer);
 		}
 		// If character is number
 		else if (ASCII_ZERO <= input[i] && input[i] <= ASCII_NINE) {
+			printf("'%c' at %d\n", input[i], i);
 			// If alphas were read
 			if (bufferIsSym) {
 				// Throw error, clear buffer, reset bools
+				printf("Error: number read and buffer has alphas\n");
 				bufferIsNum = bufferIsSym = bufferSize = 0;
 				free(buffer);
 				break;
@@ -208,6 +220,7 @@ struct Token* tokenize(char* input) {
 				buffer = append(buffer, input[i]);
 				bufferSize++;
 			}
+			printf("Buffer: %s\n", buffer);
 		}
 		// Else, character is invalid
 		else {
