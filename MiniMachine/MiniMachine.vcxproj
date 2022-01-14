@@ -143,11 +143,13 @@
     <ClCompile Include="instructionExecute.c" />
     <ClCompile Include="instructionFetch.c" />
     <ClCompile Include="MiniMachine.c" />
+    <ClCompile Include="wordmatch.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="instruction.h" />
     <ClInclude Include="instructionDecode.h" />
     <ClInclude Include="token.h" />
+    <ClInclude Include="wordmatch.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

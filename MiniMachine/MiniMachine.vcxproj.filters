@@ -27,6 +27,9 @@
     <ClCompile Include="instructionExecute.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="wordmatch.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="instruction.h">
@@ -36,6 +39,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="instructionDecode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="wordmatch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
