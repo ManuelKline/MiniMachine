@@ -166,6 +166,7 @@ struct Token* tokenize(char* input) {
 	int bufferIsNum = 0;
 	int bufferIsSym = 0;
 	int bufferIsReg = 0;
+	int lastSawR = 0;
 
 	if (input == NULL) {
 		return NULL;
@@ -189,13 +190,13 @@ struct Token* tokenize(char* input) {
 				}
 				else if (!bufferIsNum && !bufferIsSym && bufferIsReg) {
 					printf("Register token made with buffer: %s\n", buffer);
-					currentToken = createtoken(buffer, bufferSize, TOKEN_REG, 0);
+					currentToken = createtoken(buffer, bufferSize, TOKEN_REG, chartoint(slice(buffer, 1, strlen(buffer))));
 				}
 				else {
 					printf("Error: buffer is non-empty but is not clearly defined in type.\n");
 				}
 
-				bufferIsNum = bufferIsSym = bufferSize = 0;
+				bufferIsNum = bufferIsSym = bufferIsReg = bufferSize = 0;
 				free(buffer);
 				buffer = NULL;
 
@@ -218,10 +219,17 @@ struct Token* tokenize(char* input) {
 		else if ((ASCII_A <= input[i] && input[i] <= ASCII_Z) || (ASCII_A_CAP <= input[i] && input[i] <= ASCII_Z_CAP)) {
 			printf("'%c' at %d\n", input[i], i);
 			// If numbers were read
-			if (bufferIsNum) {
+			if (bufferIsNum && !bufferIsReg) {
 				// Throw error, clear buffer, reset bools
 				printf("Error: alpha read and buffer has numbers\n");
-				bufferIsNum = bufferIsSym = bufferSize = 0;
+				bufferIsNum = bufferIsSym = bufferIsReg = bufferSize = 0;
+				free(buffer);
+				break;
+			}
+			else if (!bufferIsNum && bufferIsReg) {
+				// Throw error, clear buffer, reset bools
+				printf("Error: alpha read and buffer has comprises register\n");
+				bufferIsNum = bufferIsSym = bufferIsReg = bufferSize = 0;
 				free(buffer);
 				break;
 			}
@@ -230,6 +238,9 @@ struct Token* tokenize(char* input) {
 				bufferIsSym = 1;
 				buffer = append(buffer, input[i]);
 				bufferSize++;
+				if (input[i] == 'R') {
+					lastSawR = 1;
+				}
 			}
 			printf("Buffer: %s\n", buffer);
 		}
@@ -237,12 +248,26 @@ struct Token* tokenize(char* input) {
 		else if (ASCII_ZERO <= input[i] && input[i] <= ASCII_NINE) {
 			printf("'%c' at %d\n", input[i], i);
 			// If alphas were read
-			if (bufferIsSym) {
-				// Throw error, clear buffer, reset bools
-				printf("Error: number read and buffer has alphas\n");
-				bufferIsNum = bufferIsSym = bufferSize = 0;
-				free(buffer);
-				break;
+			if (bufferIsSym && !bufferIsReg) {
+				// If last character was R, mark as possible register token
+				if (lastSawR) {
+					bufferIsSym = bufferIsNum = lastSawR = 0;
+					bufferIsReg = 1;
+					buffer = append(buffer, input[i]);
+					bufferSize++;
+				}
+				else {
+					// Throw error, clear buffer, reset bools
+					printf("Error: number read and buffer has alphas\n");
+					bufferIsNum = bufferIsSym = bufferIsReg = bufferSize = 0;
+					free(buffer);
+					break;
+				}
+			}
+			else if (!bufferIsSym && bufferIsReg) {
+				// Add input to buffer
+				buffer = append(buffer, input[i]);
+				bufferSize++;
 			}
 			else {
 				// Add input to buffer

@@ -2,6 +2,7 @@
 //
 
 #include "stdio.h"
+#include "string.h"
 #include "token.h"
 #include "instructionDecode.h"
 
@@ -13,7 +14,7 @@ int main()
     struct Token* current = NULL;
     int loopIndex = 0;
 
-    mytoken = tokenize("ADD 3 2 1");
+    mytoken = tokenize("ADD R3 R2 R1");
     current = mytoken;
 
     while (1) {
@@ -32,6 +33,6 @@ int main()
         loopIndex++;
     }
 
-    substring = slice(bigstring, 2, 4);
+    substring = slice(bigstring, 2, strlen(bigstring));
     printf("Substring: %s\n", substring);
 }
