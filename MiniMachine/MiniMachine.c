@@ -7,6 +7,8 @@
 
 int main()
 {
+    char* bigstring = "ABC";
+    char* substring = NULL;
     struct Token* mytoken = NULL;
     struct Token* current = NULL;
     int loopIndex = 0;
@@ -29,4 +31,7 @@ int main()
         current = current->nextToken;
         loopIndex++;
     }
+
+    substring = slice(bigstring, 0, 4);
+    printf("Substring: %s\n", substring);
 }

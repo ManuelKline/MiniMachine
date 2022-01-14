@@ -6,6 +6,7 @@
 #define TOKEN_BAD 0
 #define TOKEN_NUM 1
 #define TOKEN_SYM 2
+#define TOKEN_REG 3
 
 // Important ASCII Values:
 #define ASCII_A_CAP 65
@@ -62,6 +63,28 @@ int chartoint(char* asciiNum) {
 	}
 
 	return result;
+}
+
+// Slice function for strings, returns a substring at indices [start]-[end]
+char* slice(char* source, unsigned int start, unsigned int end) {
+	char* dest = NULL;		// Destination string
+
+	if (end >= start && source != NULL) {
+		dest = (char*)calloc(1, end - start + 1);
+		if (dest != NULL && strlen(source) >= end) {
+			for (int i = start; i < end; i++) {
+				dest[i] = source[i];
+			}
+		}
+		else {
+			printf("Error in slice: dest calloc failed, or end index is too large\n");
+		}
+	}
+	else {
+		printf("Error in slice: end < start, or source is null\n");
+	}
+
+	return dest;
 }
 
 // Append function for strings, returns a string with appended character
@@ -140,6 +163,7 @@ struct Token* tokenize(char* input) {
 	int bufferSize = 0;
 	int bufferIsNum = 0;
 	int bufferIsSym = 0;
+	int bufferIsReg = 0;
 
 	if (input == NULL) {
 		return NULL;
@@ -153,16 +177,20 @@ struct Token* tokenize(char* input) {
 			// If buffer contains characters:
 			if (bufferSize > 0) {
 				// Create token based on type
-				if (bufferIsNum && !bufferIsSym) {
-					printf("Token made with buffer: %s\n", buffer);
+				if (bufferIsNum && !bufferIsSym && !bufferIsReg) {
+					printf("Numerical token made with buffer: %s\n", buffer);
 					currentToken = createtoken(buffer, bufferSize, TOKEN_NUM, chartoint(buffer));
 				}
-				else if (bufferIsSym && !bufferIsNum) {
-					printf("Token made with buffer: %s\n", buffer);
+				else if (!bufferIsNum && bufferIsSym && !bufferIsReg) {
+					printf("Symbol token made with buffer: %s\n", buffer);
 					currentToken = createtoken(buffer, bufferSize, TOKEN_SYM, 0);
 				}
+				else if (!bufferIsNum && !bufferIsSym && bufferIsReg) {
+					printf("Register token made with buffer: %s\n", buffer);
+					currentToken = createtoken(buffer, bufferSize, TOKEN_REG, 0);
+				}
 				else {
-					printf("Error: buffer is non-empty but is neither number nor symbol\n");
+					printf("Error: buffer is non-empty but is not clearly defined in type.\n");
 				}
 
 				bufferIsNum = bufferIsSym = bufferSize = 0;
