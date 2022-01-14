@@ -1,5 +1,6 @@
 #include "stdio.h"
 #include "string.h"
+#include "stdlib.h"
 #include "instruction.h"
 #include "token.h"
 
@@ -156,6 +157,21 @@ struct Token* createtoken(char* literal, int literalSize, int type, int value) {
 	return newToken;
 }
 
+struct Instruction* createinstruction(int type, int arg1, int arg2, int arg3, int argnum) {
+	struct Instruction* newInst = (struct Instruction*)calloc(1, sizeof(struct Instruction));
+
+	// Set values if successful
+	if (newInst != NULL) {
+		newInst->type = type;
+		newInst->args[0] = arg1;
+		newInst->args[1] = arg2;
+		newInst->args[2] = arg3;
+		newInst->numargs = argnum;
+	}
+
+	return newInst;
+}
+
 // tokenize: take a single line and convert it to tokens
 struct Token* tokenize(char* input) {
 	struct Token* currentToken = NULL;
@@ -172,10 +188,10 @@ struct Token* tokenize(char* input) {
 		return NULL;
 	}
 
-	for (unsigned int i = 0; i < strlen(input); i++) {
+	for (unsigned int i = 0; i <= strlen(input); i++) {
 
-		// If character is whitespace:
-		if (input[i] == ' ') {
+		// If character is whitespace or EOF:
+		if (input[i] == ' ' || input[i] == '\0') {
 			printf("Whitespace at %d\n", i);
 			// If buffer contains characters:
 			if (bufferSize > 0) {
@@ -289,5 +305,26 @@ struct Token* tokenize(char* input) {
 
 // decode: take the tokens for a single instruction and return a single instruction struct
 struct Instruction* decode(struct Token* firstToken) {
+	struct Token* currentToken = firstToken;
+	int numargs = 0;
 
+	while (currentToken != NULL) {
+		switch (currentToken->type)
+		{
+		case TOKEN_SYM:
+			// TODO
+			break;
+		case TOKEN_NUM:
+			numargs++;
+			// TODO
+			break;
+		case TOKEN_REG:
+			numargs++;
+			// TODO
+			break;
+		default:
+			printf("Error in decode: instruction type undefined\n");
+			break;
+		}
+	}
 }

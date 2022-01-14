@@ -46,6 +46,7 @@
 struct Instruction {
 	int type;
 	int args[ARGUMENT_MAX];
+	int numargs;
 };
 
 #endif // !INSTRUCTION_H
