@@ -7,7 +7,7 @@
 
 int main()
 {
-    char* bigstring = "ABC";
+    char* bigstring = "ABCDEF";
     char* substring = NULL;
     struct Token* mytoken = NULL;
     struct Token* current = NULL;
@@ -32,6 +32,6 @@ int main()
         loopIndex++;
     }
 
-    substring = slice(bigstring, 0, 4);
+    substring = slice(bigstring, 2, 4);
     printf("Substring: %s\n", substring);
 }

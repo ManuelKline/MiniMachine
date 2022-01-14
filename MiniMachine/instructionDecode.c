@@ -68,12 +68,14 @@ int chartoint(char* asciiNum) {
 // Slice function for strings, returns a substring at indices [start]-[end]
 char* slice(char* source, unsigned int start, unsigned int end) {
 	char* dest = NULL;		// Destination string
+	unsigned int destindex = 0;
 
 	if (end >= start && source != NULL) {
 		dest = (char*)calloc(1, end - start + 1);
 		if (dest != NULL && strlen(source) >= end) {
-			for (int i = start; i < end; i++) {
-				dest[i] = source[i];
+			for (unsigned int i = start; i < end; i++) {
+				dest[destindex] = source[i];
+				destindex++;
 			}
 		}
 		else {
