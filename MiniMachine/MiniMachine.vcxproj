@@ -142,12 +142,15 @@
     <ClCompile Include="instructionDecode.c" />
     <ClCompile Include="instructionExecute.c" />
     <ClCompile Include="instructionFetch.c" />
+    <ClCompile Include="memoryfile.c" />
     <ClCompile Include="MiniMachine.c" />
     <ClCompile Include="wordmatch.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="instruction.h" />
     <ClInclude Include="instructionDecode.h" />
+    <ClInclude Include="instructionExecute.h" />
+    <ClInclude Include="memoryfile.h" />
     <ClInclude Include="token.h" />
     <ClInclude Include="wordmatch.h" />
   </ItemGroup>

@@ -6,6 +6,8 @@
 #include "stdlib.h"
 #include "token.h"
 #include "instructionDecode.h"
+#include "instructionExecute.h"
+#include "memoryfile.h"
 
 int main()
 {
@@ -58,6 +60,11 @@ int main()
 
     substring = slice(bigstring, 2, strlen(bigstring));
     printf("Substring: %s\n", substring);
+
+    initialize(16, 8, 256);
+    testmemory();
+    destroymem();
+    testmemory();
 }
 
 
@@ -68,8 +75,7 @@ DESIGN CONSIDERATIONS:
             Define these in main(). Define struct holding pointers to all globally availiable points of data.
             Pass this struct to relevant functions (ie. instruction execution functions).
         Solution 2:
-            Define these in a separate file. Allow others files to access static variables. Encapsulate to ensure
-            security (ie. do NOT make global variables for stack, SP, etc.).
+            Define these in a separate file. Allow others files to access static variables through interface.
     Design Issue 2: Software Architecture:
         Solution 1: Pipe and Filter
             Call sequence that starts at main(), ends at execute(). Communication resticted one-way. Conflicts

@@ -30,6 +30,9 @@
     <ClCompile Include="wordmatch.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="memoryfile.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="instruction.h">
@@ -42,6 +45,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="wordmatch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="memoryfile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="instructionExecute.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
