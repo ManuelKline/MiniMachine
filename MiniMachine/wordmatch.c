@@ -1,6 +1,7 @@
 #include "stdio.h"
 #include "string.h"
 #include "stdlib.h"
+#include "instruction.h"
 
 #define ALPHABET_LENGTH 26
 #define MAX_WORD_LENGTH 64
@@ -84,6 +85,7 @@ const static unsigned long int AlphaMap[] = {
 struct Node {
     unsigned long int validity;             // 26 bits represent valid next nodes - remaining 6 bits indicate validity (000001...b = valid)
     int wordId;                             // Word ID number in dictionary, -1 = does not exist/removed
+    int instruction_type;                   // Instruction type, as defined in instruction.h
     struct Node* children[ALPHABET_LENGTH]; // Pointers to children nodes, only some are valid
 };
 
@@ -331,8 +333,8 @@ char* word_decap(char* word) {
     ARGUMENTS:
         Pointer to char of word to find in tree.
     RETURN VALUES:
-        1 if word is found.
-        0 if not found.
+        Instruction type if word is found.
+        -1 if not found.
     HIGH-LEVEL DESCRIPTION:
         The function searches the tree for the matching word, and stops on the following conditions:
         Firstly, the sequence of letters must exist.
@@ -345,7 +347,7 @@ char* word_decap(char* word) {
 */
 int find_word(char* word) {
     struct Node* current = &root;
-    int returnVal = 1;
+    int returnVal = -1;
     int err;
 
     // Verify word before use
@@ -365,23 +367,25 @@ int find_word(char* word) {
             current = current->children[letter];    // Jump to next node
         }
         else {  // Else, the word does not exist
-            returnVal = 0;
+            //returnVal = -1;
             break;
         }
     }
 
-    // if search ended but current node is NOT valid:
-    if (!(current->validity & VALID_BIT) && returnVal) {
-        returnVal = 0;
+    // if search ended and current node is valid:
+    if (current->validity & VALID_BIT) {
+        //returnVal = -1;
+        returnVal = current->instruction_type;
     }
 
     return returnVal;
 }
 
 /*  FUNCTION:
-        add_word(char* word)
+        add_word(char* word, int insttype)
     ARGUMENTS:
         Pointer to char of word to add to tree and dictionary.
+        Instruction type pertaining to word.
     RETURN VALUES:
         None.
     HIGH-LEVEL DESCRIPTION:
@@ -390,7 +394,7 @@ int find_word(char* word) {
         already exists. Before doing so, it verifies that the word is composed of only
         alpha characters. It also decapitalizes the word.
 */
-void add_word(char* word) {
+void add_word(char* word, int insttype) {
     struct Node* current = &root;
     int err;
 
@@ -424,11 +428,15 @@ void add_word(char* word) {
             // Set validity to default
             current->validity = 0;
             current->wordId = -1;
+            current->instruction_type = -1;
         }
     }
 
     // When finished, set valid bit on last node
     current->validity = current->validity | VALID_BIT;
+
+    // Set type
+    current->instruction_type = insttype;
 
     // Add this word to the dictionary
     current->wordId = dict_append(word_safe);

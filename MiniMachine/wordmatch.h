@@ -6,6 +6,7 @@
 int find_word(char* word);
 void add_word(char* word);
 int remove_word(char* word);
+void print_dict();
 void free_all();
 
 #endif

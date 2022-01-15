@@ -2,9 +2,9 @@
 #include "stdlib.h"
 #include "instruction.h"
 
-static int* stack;
-static int* regfile;
-static struct Instruction** instMemory;	// Array of pointers to instructions
+static int* stack = NULL;
+static int* regfile = NULL;
+static struct Instruction** instMemory = NULL;	// Array of pointers to instructions
 static int sp = -1;
 static int pc = 0;
 static int mem_stacksize = 0;

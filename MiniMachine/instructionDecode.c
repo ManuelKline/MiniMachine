@@ -306,21 +306,48 @@ struct Token* tokenize(char* input) {
 // decode: take the tokens for a single instruction and return a single instruction struct
 struct Instruction* decode(struct Token* firstToken) {
 	struct Token* currentToken = firstToken;
+	int sym_counter = 0;
 	int numargs = 0;
 
 	while (currentToken != NULL) {
 		switch (currentToken->type)
 		{
 		case TOKEN_SYM:
-			// TODO
+			if (sym_counter == 0) {
+				sym_counter++;
+				// Use wordmatch to find specific command
+			}
+			else {
+				printf("Error in decode: two symbol tokens present\n");
+			}
 			break;
 		case TOKEN_NUM:
-			numargs++;
-			// TODO
+			if (sym_counter) {
+				if (numargs < ARGUMENT_MAX) {
+					// Insert numerical value at args[numargs]
+					numargs++;
+				}
+				else {
+					printf("Error in decode: Exceeding max number of args\n");
+				}
+			}
+			else {
+				printf("Error in decode: first token is register, not a command\n");
+			}
 			break;
 		case TOKEN_REG:
-			numargs++;
-			// TODO
+			if (sym_counter) {
+				if (numargs < ARGUMENT_MAX) {
+					// Insert numerical value at args[numargs]
+					numargs++;
+				}
+				else {
+					printf("Error in decode: Exceeding max number of args\n");
+				}
+			}
+			else {
+				printf("Error in decode: first token is register, not a command\n");
+			}
 			break;
 		default:
 			printf("Error in decode: instruction type undefined\n");

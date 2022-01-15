@@ -5,9 +5,12 @@
 
 #define ARGUMENT_MAX		3	// Max number of arguments
 
-// Special instructions, 0-9 reserved
+// Special (system) instructions, 0-9 reserved
 #define TYPE_NOP			0	// No operations
 #define TYPE_HALT			1	// Halt program
+
+#define SYSOP_START			0
+#define SYSOP_END			9
 
 // Branch instructions, 10-19 reserved, registers for arguments only
 #define TYPE_BR				10	// Branch (no condition)
@@ -18,9 +21,15 @@
 #define TYPE_BGE			15	// Branch if ARG1 >= ARG2
 #define TYPE_BLE			16	// Branch if ARG1 <= ARG2
 
+#define BCHOP_START			10
+#define BCHOP_END			19
+
 // Stack instructions, 20-29 reserved, registers for arguments only
 #define TYPE_PUSH			20	// Push register onto stack
 #define TYPE_POP			21	// Pop value on stack into register
+
+#define STKOP_START			20
+#define STKOP_END			29
 
 // Arithmetic Operations, 100-199 reserved, registers only (for now)
 #define TYPE_ADD			100	// Add Reg1 RegDest Reg2 (that is, let RegDest = Reg1 +  Reg2)
@@ -29,18 +38,15 @@
 #define TYPE_DIV			103 // Same thing but divide
 #define TYPE_MOD			104 // Same as division, but give the remainder as the result
 
-// Register move operations, 200-299 reserved
-#define TYPE_MOV_0			200	// Move immediate value into register 0. Use: MOV R0 [Immediate]
-#define TYPE_MOV_1			201
-#define TYPE_MOV_2			202
-#define TYPE_MOV_3			203
-#define TYPE_MOV_4			204
-#define TYPE_MOV_5			205
-#define TYPE_MOV_6			206
-#define TYPE_MOV_7			207
+#define ALUOP_START			100
+#define ALUOP_END			199
 
-// Register move operations, special, 300-399 reserved
-#define TYPE_MOV_REG		300	// Move value in one register to another
+// Register move operations, 200-210 reserved
+#define TYPE_MOV			200	// Move immediate value into register 0. Use: MOV R0 [Immediate]
+#define TYPE_MOV_REG		201	// Move value in one register to another
+
+#define MOVOP_START			200
+#define MOVOP_END			210
 
 
 struct Instruction {
