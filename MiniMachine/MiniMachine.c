@@ -7,7 +7,9 @@
 #include "token.h"
 #include "instructionDecode.h"
 #include "instructionExecute.h"
+#include "instruction.h"
 #include "memoryfile.h"
+#include "wordmatch.h"
 
 int main()
 {
@@ -15,8 +17,10 @@ int main()
     char* substring = NULL;
     struct Token* mytoken = NULL;
     struct Token* current = NULL;
+    struct Instruction* myinst = NULL;
     int loopIndex = 0;
 
+    // Tokenize testing
     mytoken = tokenize("ADD R13 R12 R11");
     current = mytoken;
 
@@ -58,9 +62,27 @@ int main()
         loopIndex++;
     }
 
+    free(mytoken);
+    mytoken = NULL;
+
+    // Decode testing
+    add_word("ADD", TYPE_ADD);
+    myinst = decodeline("ADD R13 R12 R11");
+
+    if (myinst != NULL) {
+        printf("Instruction Type: %d\n", myinst->type);
+        printf("Number of arguments: %d\n", myinst->numargs);
+
+        for (int i = 0; i < myinst->numargs; i++) {
+            printf("Argument %d: %d\n", i, myinst->args[i]);
+        }
+    }
+
+    // Slice test
     substring = slice(bigstring, 2, strlen(bigstring));
     printf("Substring: %s\n", substring);
 
+    // Memory file test
     initialize(16, 8, 256);
     testmemory();
     destroymem();

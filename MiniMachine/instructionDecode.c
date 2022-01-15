@@ -3,6 +3,7 @@
 #include "stdlib.h"
 #include "instruction.h"
 #include "token.h"
+#include "wordmatch.h"
 
 #define TOKEN_BAD 0
 #define TOKEN_NUM 1
@@ -304,18 +305,26 @@ struct Token* tokenize(char* input) {
 }
 
 // decode: take the tokens for a single instruction and return a single instruction struct
-struct Instruction* decode(struct Token* firstToken) {
+struct Instruction* instructionize(struct Token* firstToken) {
 	struct Token* currentToken = firstToken;
+	struct Instruction* inst = (struct Instruction*)calloc(1, sizeof(struct Instruction));
 	int sym_counter = 0;
 	int numargs = 0;
+	int debug_counter = 0;
 
-	while (currentToken != NULL) {
+	if (inst == NULL) {
+		printf("Error in decode: calloc instruction failed\n");
+		return NULL;
+	}
+
+	while (currentToken != NULL && debug_counter < ARGUMENT_MAX + 1) {
 		switch (currentToken->type)
 		{
 		case TOKEN_SYM:
 			if (sym_counter == 0) {
 				sym_counter++;
 				// Use wordmatch to find specific command
+				inst->type = find_word(currentToken->literal);
 			}
 			else {
 				printf("Error in decode: two symbol tokens present\n");
@@ -325,6 +334,7 @@ struct Instruction* decode(struct Token* firstToken) {
 			if (sym_counter) {
 				if (numargs < ARGUMENT_MAX) {
 					// Insert numerical value at args[numargs]
+					inst->args[numargs] = currentToken->value;
 					numargs++;
 				}
 				else {
@@ -339,6 +349,7 @@ struct Instruction* decode(struct Token* firstToken) {
 			if (sym_counter) {
 				if (numargs < ARGUMENT_MAX) {
 					// Insert numerical value at args[numargs]
+					inst->args[numargs] = currentToken->value;
 					numargs++;
 				}
 				else {
@@ -353,5 +364,16 @@ struct Instruction* decode(struct Token* firstToken) {
 			printf("Error in decode: instruction type undefined\n");
 			break;
 		}
+
+		currentToken = currentToken->nextToken;
+		debug_counter++;
 	}
+
+	inst->numargs = numargs;
+
+	return inst;
+}
+
+struct Instruction* decodeline(char* input) {
+	return instructionize(tokenize(input));
 }
