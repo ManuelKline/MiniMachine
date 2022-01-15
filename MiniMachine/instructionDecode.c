@@ -375,5 +375,7 @@ struct Instruction* instructionize(struct Token* firstToken) {
 }
 
 struct Instruction* decodeline(char* input) {
+	// TODO: Put instruction into instruction memory
+
 	return instructionize(tokenize(input));
 }
