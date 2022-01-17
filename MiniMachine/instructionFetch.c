@@ -91,6 +91,7 @@ int getline(char** lineptr, FILE* stream) {
 	return length;
 }
 
+/*
 char* fetchinstruction(const char* filename) {
 	char* line = NULL;
 	int length;
@@ -117,4 +118,36 @@ char* fetchinstruction(const char* filename) {
 		return line;
 	}
 	return NULL;
+}
+*/
+
+char* fetchinstruction() {
+	char* line = NULL;
+	int length;
+	errno_t err;
+
+	if (fp != NULL) {
+		// Read single line of any size
+		length = getline(&line, fp);
+		if (length == -1) {
+			printf("Error in fetchinstruction: getline returned -1\n");
+			return NULL;
+		}
+	}
+	else {
+		printf("Error in fetchinstruction: file could not be opened\n");
+		return NULL;
+	}
+
+	return line;
+}
+
+int open_file_read(const char* filename) {
+	errno_t err = fopen_s(&fp, filename, "r");
+	return err;
+}
+
+int close_file() {
+	int err = fclose(fp);
+	return err;
 }

@@ -91,7 +91,12 @@ int main()
     printf("Mem test concluded\n");
 
     // Fetch test
-    printf("Instruction: %s\n", fetchinstruction("example.txt"));
+    open_file_read("example.txt");
+    printf("Instruction: (%s)\n", fetchinstruction());
+    printf("Instruction: (%s)\n", fetchinstruction());
+    printf("Instruction: (%s)\n", fetchinstruction());
+    printf("Instruction: (%s)\n", fetchinstruction());
+    close_file();
 }
 
 
