@@ -53,5 +53,13 @@
     <ClInclude Include="instructionExecute.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="instructionFetch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="example.txt">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

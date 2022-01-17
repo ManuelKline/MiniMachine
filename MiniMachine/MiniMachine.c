@@ -7,6 +7,7 @@
 #include "token.h"
 #include "instructionDecode.h"
 #include "instructionExecute.h"
+#include "instructionFetch.h"
 #include "instruction.h"
 #include "memoryfile.h"
 #include "wordmatch.h"
@@ -87,6 +88,10 @@ int main()
     testmemory();
     destroymem();
     testmemory();
+    printf("Mem test concluded\n");
+
+    // Fetch test
+    printf("Instruction: %s\n", fetchinstruction("example.txt"));
 }
 
 

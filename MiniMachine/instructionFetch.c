@@ -1,9 +1,13 @@
 #include "stdio.h"
+#include "string.h"
 #include "stdlib.h"
+#include "errno.h"
+
+static FILE* fp;
 
 // Append function for strings, returns a string with appended character
 // Should probably add this to a separate file, since it is becoming useful
-char* append(char* dest, char newchar) {
+char* append_if(char* dest, char newchar) {
 	char* temp = NULL;		// Temp char* to hold new string
 	int newLength = 0;
 
@@ -18,7 +22,7 @@ char* append(char* dest, char newchar) {
 		}
 
 		// Copy contents of old string into new string
-		for (int i = 0; i < strlen(dest); i++) {
+		for (unsigned int i = 0; i < strlen(dest); i++) {
 			//printf("Loop 1 index %d, character %c\n", i, dest[i]);
 			temp[i] = dest[i];
 		}
@@ -57,15 +61,25 @@ int getline(char** lineptr, FILE* stream) {
 		return -1;
 	}
 
+	printf("getline: arguments valid\n");
+
 	// If necessary, allocate memory for single character
 	if (*lineptr == NULL) {
+		printf("getline: lineptr null, calloc\n");
 		// Don't allocate space, but allow for reallocation
-		*lineptr = (char*)calloc(1, 0);
+		*lineptr = (char*)calloc(1, 1);
+		printf("getline: calloc done\n");
 	}
 
+	printf("getline: lineptr ready\n");
+
 	data = fgetc(stream);
+	printf("getline: fgetc done\n");
 	while (data != EOF && data != '\n') {
-		*lineptr = append(*lineptr, data);
+		printf("getline lineptr: %s\n", *lineptr);
+		printf("getline: calling append with data: %d\n", data);
+		*lineptr = append_if(*lineptr, data);
+		printf("getline: append done\n");
 		if (*lineptr == NULL) {
 			printf("Error in getline: append returned null pointer\n");
 			return -1;
@@ -78,13 +92,17 @@ int getline(char** lineptr, FILE* stream) {
 }
 
 char* fetchinstruction(const char* filename) {
-	FILE* fp = fopen(filename, "r");
-	char** line = NULL;
+	char* line = NULL;
 	int length;
+	errno_t err;
+
+	printf("File open calling\n");
+	err = fopen_s(&fp, filename, "r");
+	printf("File open called: %d\n", err);
 
 	if (fp != NULL) {
 		// Read single line of any size
-		length = getline(line, fp);
+		length = getline(&line, fp);
 		if (length == -1) {
 			printf("Error in fetchinstruction: getline returned -1\n");
 			return NULL;
@@ -95,5 +113,8 @@ char* fetchinstruction(const char* filename) {
 		return NULL;
 	}
 
-	return &line;
+	if (line != NULL) {
+		return line;
+	}
+	return NULL;
 }

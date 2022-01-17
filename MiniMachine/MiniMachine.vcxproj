@@ -150,9 +150,13 @@
     <ClInclude Include="instruction.h" />
     <ClInclude Include="instructionDecode.h" />
     <ClInclude Include="instructionExecute.h" />
+    <ClInclude Include="instructionFetch.h" />
     <ClInclude Include="memoryfile.h" />
     <ClInclude Include="token.h" />
     <ClInclude Include="wordmatch.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="example.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
