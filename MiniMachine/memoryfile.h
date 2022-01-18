@@ -9,10 +9,11 @@ void step();
 void setpc(int location);
 void addpc(int branch);
 void addinstruction(struct Instruction* data);
+struct Instruction* getinstruction();
 int getreg(int regnum);
 void setreg(int regnum, int data);
 void checkinitialized();
-void initialize(unsigned int stacksize, unsigned int regfilesize, unsigned int instmemsize);
+void initialize(unsigned int stacksize, unsigned int regfilesize);
 void destroymem();
 
 #endif // !MEMORYFILE_H

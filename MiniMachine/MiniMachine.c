@@ -84,13 +84,21 @@ int main()
     printf("Substring: %s\n", substring);
 
     // Memory file test
-    initialize(16, 8, 256);
+    initialize(16, 8);
     testmemory();
     destroymem();
     testmemory();
     printf("Mem test concluded\n");
 
     // Fetch test
+    open_file_read("example.txt");
+    printf("Instruction: (%s)\n", fetchinstruction());
+    printf("Instruction: (%s)\n", fetchinstruction());
+    printf("Instruction: (%s)\n", fetchinstruction());
+    printf("Instruction: (%s)\n", fetchinstruction());
+    close_file();
+
+    // Fetch test 2
     open_file_read("example.txt");
     printf("Instruction: (%s)\n", fetchinstruction());
     printf("Instruction: (%s)\n", fetchinstruction());
@@ -151,7 +159,12 @@ DESIGN CONSIDERATIONS:
                 For instance, if an instruction at index 1000 jumps to 3000, the memory
                 file must goto the second block to find the instruction. This is simply
                 a matter of performing "index % 2048" to find the block number.
+                This is much more efficient, even if random access is only possible
+                within blocks.
 
                 Notice that this bares similarities to file system drivers in regards
                 to how blocks are allocated for files of varying length.
+
+    Design Issue 5: Getting rid of the Java naming standards that have invaded my C standards.
+        Solution 1: Instruction = instn, Instruction Fetch = instn_fetch, replace caps with underscoring.
 */
