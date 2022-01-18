@@ -120,4 +120,38 @@ DESIGN CONSIDERATIONS:
             Removes need for communication to be availiable
             between main() and execute(), but can present issues of concurrency on multiple threads if more
             than one file includes the data. Semaphores or mutexes might be required in this case.
+
+    Design Issue 3: Maintainable Flow of Instruction Fetching --> Execution of an Assembly Program
+        Solution 1:
+            The fetching of instructions ought to read from a MASM-like file line-by-line.
+            Aside from the header, each line should constitute a single instruction.
+            Fetch the instructions and feed them into the parser, one-by-one. The parser should
+            feed into the decoder, and the decoder should feed into a data structure designed to hold the
+            instructions.
+
+            The data structure ought to be a dynamically-allocated array of Instruction structs.
+            We want an array, since we need random access of some sort to allow for branching, jumping,
+            and function calling (should we add that in the future). This rules out linked list (too slow).
+
+            Once the WHOLE file is read and all instructions put into our "instruction memory"
+            data structure, the execution can begin. We cannot let the decoder feed directly into the executer,
+            since it is possible that the assembly program will have an instruction that results in jumping
+            ahead of whatever instruction the decoder is currently processing. Every instruction must be known
+            before execution can proceed.
+
+    Design Issue 4: Dynamic Instruction Memory
+        Solution 1: Dynamic Allocation of Blocks, with Blocks of a Constant Size:
+            To allow for a file of any size to be read, we can organize instructions like so:
+                First, define the block size (say, 2048 instructions)
+                Then, define a linked list of blocks. Start with just 1.
+                When the first block is full, malloc a second block.
+                Allocate more blocks as needed.
+
+                This should work, but jumping will require slightly more work.
+                For instance, if an instruction at index 1000 jumps to 3000, the memory
+                file must goto the second block to find the instruction. This is simply
+                a matter of performing "index % 2048" to find the block number.
+
+                Notice that this bares similarities to file system drivers in regards
+                to how blocks are allocated for files of varying length.
 */

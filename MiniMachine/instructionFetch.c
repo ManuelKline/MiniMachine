@@ -91,36 +91,6 @@ int getline(char** lineptr, FILE* stream) {
 	return length;
 }
 
-/*
-char* fetchinstruction(const char* filename) {
-	char* line = NULL;
-	int length;
-	errno_t err;
-
-	printf("File open calling\n");
-	err = fopen_s(&fp, filename, "r");
-	printf("File open called: %d\n", err);
-
-	if (fp != NULL) {
-		// Read single line of any size
-		length = getline(&line, fp);
-		if (length == -1) {
-			printf("Error in fetchinstruction: getline returned -1\n");
-			return NULL;
-		}
-	}
-	else {
-		printf("Error in fetchinstruction: file could not be opened\n");
-		return NULL;
-	}
-
-	if (line != NULL) {
-		return line;
-	}
-	return NULL;
-}
-*/
-
 char* fetchinstruction() {
 	char* line = NULL;
 	int length;
