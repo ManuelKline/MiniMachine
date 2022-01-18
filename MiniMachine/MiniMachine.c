@@ -4,14 +4,15 @@
 #include "stdio.h"
 #include "string.h"
 #include "stdlib.h"
-#include "token.h"
-#include "instructionDecode.h"
+//#include "token.h"
+//#include "instructionDecode.h"
 #include "instructionExecute.h"
-#include "instructionFetch.h"
-#include "instruction.h"
-#include "memoryfile.h"
-#include "wordmatch.h"
+//#include "instructionFetch.h"
+//#include "instruction.h"
+//#include "memoryfile.h"
+//#include "wordmatch.h"
 
+/*
 void instn_fetch_deocde_test() {
     int debug_counter = 0;
     char* instn_line = NULL;
@@ -75,9 +76,13 @@ void instn_fetch_deocde_test() {
         debug_counter++;
     }
 }
+*/
 
 int main()
 {
+    loadinstructionset_full();
+
+    /*
     char* bigstring = "ABCDEF";
     char* substring = NULL;
     struct Token* mytoken = NULL;
@@ -146,8 +151,9 @@ int main()
     // Slice test
     substring = slice(bigstring, 2, strlen(bigstring));
     printf("Substring: %s\n", substring);
+    */
 
-    instn_fetch_deocde_test();
+    //instn_fetch_deocde_test();
 
     /*
     // Memory file test

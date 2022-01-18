@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="instruction.c" />
     <ClCompile Include="instructionDecode.c" />
     <ClCompile Include="instructionExecute.c" />
     <ClCompile Include="instructionFetch.c" />
