@@ -41,7 +41,7 @@ int chartoint(char* asciiNum) {
 	int buffer = 0;
 	int digitNum = 0;
 
-	printf("chartoint called with: %s\n", asciiNum);
+	//printf("chartoint called with: %s\n", asciiNum);
 
 	if (asciiNum == NULL) {
 		return 0;
@@ -193,20 +193,20 @@ struct Token* tokenize(char* input) {
 
 		// If character is whitespace or EOF:
 		if (input[i] == ' ' || input[i] == '\0') {
-			printf("Whitespace at %d\n", i);
+			//printf("Whitespace at %d\n", i);
 			// If buffer contains characters:
 			if (bufferSize > 0) {
 				// Create token based on type
 				if (bufferIsNum && !bufferIsSym && !bufferIsReg) {
-					printf("Numerical token made with buffer: %s\n", buffer);
+					//printf("Numerical token made with buffer: %s\n", buffer);
 					currentToken = createtoken(buffer, bufferSize, TOKEN_NUM, chartoint(buffer));
 				}
 				else if (!bufferIsNum && bufferIsSym && !bufferIsReg) {
-					printf("Symbol token made with buffer: %s\n", buffer);
+					//printf("Symbol token made with buffer: %s\n", buffer);
 					currentToken = createtoken(buffer, bufferSize, TOKEN_SYM, 0);
 				}
 				else if (!bufferIsNum && !bufferIsSym && bufferIsReg) {
-					printf("Register token made with buffer: %s\n", buffer);
+					//printf("Register token made with buffer: %s\n", buffer);
 					currentToken = createtoken(buffer, bufferSize, TOKEN_REG, chartoint(slice(buffer, 1, strlen(buffer))));
 				}
 				else {
@@ -219,7 +219,7 @@ struct Token* tokenize(char* input) {
 
 				// Record as first token if applicable
 				if (firstToken == NULL) {
-					printf("This is the first token\n");
+					//printf("This is the first token\n");
 					firstToken = currentToken;
 					prevToken = currentToken;
 				}
@@ -234,7 +234,7 @@ struct Token* tokenize(char* input) {
 		}
 		// If character is alpha:
 		else if ((ASCII_A <= input[i] && input[i] <= ASCII_Z) || (ASCII_A_CAP <= input[i] && input[i] <= ASCII_Z_CAP)) {
-			printf("'%c' at %d\n", input[i], i);
+			//printf("'%c' at %d\n", input[i], i);
 			// If numbers were read
 			if (bufferIsNum && !bufferIsReg) {
 				// Throw error, clear buffer, reset bools
@@ -259,11 +259,11 @@ struct Token* tokenize(char* input) {
 					lastSawR = 1;
 				}
 			}
-			printf("Buffer: %s\n", buffer);
+			//printf("Buffer: %s\n", buffer);
 		}
 		// If character is number
 		else if (ASCII_ZERO <= input[i] && input[i] <= ASCII_NINE) {
-			printf("'%c' at %d\n", input[i], i);
+			//printf("'%c' at %d\n", input[i], i);
 			// If alphas were read
 			if (bufferIsSym && !bufferIsReg) {
 				// If last character was R, mark as possible register token
@@ -292,7 +292,7 @@ struct Token* tokenize(char* input) {
 				buffer = append(buffer, input[i]);
 				bufferSize++;
 			}
-			printf("Buffer: %s\n", buffer);
+			//printf("Buffer: %s\n", buffer);
 		}
 		// Else, character is invalid
 		else {

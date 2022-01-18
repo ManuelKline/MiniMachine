@@ -61,25 +61,25 @@ int getline(char** lineptr, FILE* stream) {
 		return -1;
 	}
 
-	printf("getline: arguments valid\n");
+	//printf("getline: arguments valid\n");
 
 	// If necessary, allocate memory for single character
 	if (*lineptr == NULL) {
-		printf("getline: lineptr null, calloc\n");
+		//printf("getline: lineptr null, calloc\n");
 		// Don't allocate space, but allow for reallocation
 		*lineptr = (char*)calloc(1, 1);
-		printf("getline: calloc done\n");
+		//printf("getline: calloc done\n");
 	}
 
-	printf("getline: lineptr ready\n");
+	//printf("getline: lineptr ready\n");
 
 	data = fgetc(stream);
-	printf("getline: fgetc done\n");
+	//printf("getline: fgetc done\n");
 	while (data != EOF && data != '\n') {
-		printf("getline lineptr: %s\n", *lineptr);
-		printf("getline: calling append with data: %d\n", data);
+		//printf("getline lineptr: %s\n", *lineptr);
+		//printf("getline: calling append with data: %d\n", data);
 		*lineptr = append_if(*lineptr, data);
-		printf("getline: append done\n");
+		//printf("getline: append done\n");
 		if (*lineptr == NULL) {
 			printf("Error in getline: append returned null pointer\n");
 			return -1;

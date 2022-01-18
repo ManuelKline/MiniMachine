@@ -12,6 +12,70 @@
 #include "memoryfile.h"
 #include "wordmatch.h"
 
+void instn_fetch_deocde_test() {
+    int debug_counter = 0;
+    char* instn_line = NULL;
+    struct Instruction* instn = NULL;
+
+    // Add words
+    add_word("ADD", TYPE_ADD);
+    add_word("SUB", TYPE_SUB);
+    add_word("MUL", TYPE_MUL);
+    add_word("DIV", TYPE_DIV);
+    add_word("MOV", TYPE_MOV);
+
+    // Create memory file
+    initialize(16, 16);
+    testmemory();
+
+    // Fetch instructions
+    open_file_read("example.txt");
+    while (1) {
+        instn_line = fetchinstruction();
+        if (strlen(instn_line) > 0) {
+            // Decode instruction, add to memory
+            addinstruction(decodeline(instn_line));
+        }
+        else {
+            break;
+        }
+
+        if (debug_counter > 16) {
+            break;
+        }
+        debug_counter++;
+    }
+    close_file();
+    debug_counter = 0;
+
+    printf("\n");
+    // Read instructions from instn memory
+    setpc(0);
+    while (1) {
+        instn = getinstruction();
+
+        if (instn != NULL) {
+            printf("Instruction Type: %d\n", instn->type);
+            printf("Number of arguments: %d\n", instn->numargs);
+
+            for (int i = 0; i < instn->numargs; i++) {
+                printf("Argument %d: %d\n", i, instn->args[i]);
+            }
+        }
+        else {
+            printf("End of instructions\n");
+            break;
+        }
+
+        printf("\n");
+
+        if (debug_counter > 16) {
+            break;
+        }
+        debug_counter++;
+    }
+}
+
 int main()
 {
     char* bigstring = "ABCDEF";
@@ -83,6 +147,9 @@ int main()
     substring = slice(bigstring, 2, strlen(bigstring));
     printf("Substring: %s\n", substring);
 
+    instn_fetch_deocde_test();
+
+    /*
     // Memory file test
     initialize(16, 8);
     testmemory();
@@ -105,6 +172,7 @@ int main()
     printf("Instruction: (%s)\n", fetchinstruction());
     printf("Instruction: (%s)\n", fetchinstruction());
     close_file();
+    */
 }
 
 

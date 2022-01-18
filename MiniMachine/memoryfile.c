@@ -2,7 +2,7 @@
 #include "stdlib.h"
 #include "instruction.h"
 
-#define INSTN_BLOCKSIZE_DEFAULT 8;				// Recommend 2048
+#define INSTN_BLOCKSIZE_DEFAULT 4;				// Recommend 2048
 #define STACK_SIZE_DEFAULT 2048;
 
 // ***** Stack *****
@@ -66,6 +66,9 @@ void setpc(int location) {
 	if (location >= 0) {
 		pc = location;
 	}
+	else {
+		printf("Error in setpc: failed to set pc to argument\n");
+	}
 }
 
 // Instruction branch relative position
@@ -77,19 +80,39 @@ void addpc(int branch) {
 // Instruction input new instruction
 void addinstruction(struct Instruction* data) {
 	struct Instn_Block_Listing* block_location = first_block;
-	pc++;
+	struct Instn_Block_Listing* prev_location = first_block;
 
-	// Goto block listing that pc resides
+	printf("addinstruction: pc = %d\n", pc);
+
+	// Goto block listing that pc resides in
 	for (int i = 0; i < pc / instn_blocksize; i++) {
 		if (block_location != NULL) {
-			// Goto next if possible
+			printf("Note: proceeding to block listing %d\n", i);
+			// Record current location as previous
+			prev_location = block_location;
+			
+			// Get to next location
 			block_location = block_location->next_block;
+
+			// Get previous location's next pointer
+			//prev_location->next_block = block_location;
 		}
 		else {
 			// Allocate new block
 			block_location = (struct Instn_Block_Listing*)calloc(1, sizeof(struct Instn_Block_Listing));
 			if (block_location != NULL) {
+				printf("Note: new block listing allocated, index: %d\n", i);
+				// Connect previous listing with current one
+				prev_location->next_block = block_location;
+
+				// Record current location as previous
+				prev_location = block_location;
+
+				// Get to next location
 				block_location = block_location->next_block;
+
+				// Get previous location's next pointer
+				//prev_location->next_block = block_location;
 			}
 			else {
 				printf("Error in addinstruction: block listing allocation failed\n");
@@ -105,6 +128,7 @@ void addinstruction(struct Instruction* data) {
 		else {
 			block_location->instn_block = (struct Instruction**)calloc(1, sizeof(struct Instruction*) * instn_blocksize);
 			if (block_location->instn_block != NULL) {
+				printf("Note: new block allocated, listing already exists\n");
 				block_location->instn_block[pc % instn_blocksize] = data;
 			}
 			else {
@@ -114,9 +138,19 @@ void addinstruction(struct Instruction* data) {
 	}
 	else {
 		block_location = (struct Instn_Block_Listing*)calloc(1, sizeof(struct Instn_Block_Listing));
+		// Connect previous listing with current one
+		if (prev_location != NULL && prev_location != block_location) {
+			prev_location->next_block = block_location;
+		}
+		else {
+			printf("Warning in addinstruction: previous location is null, or previous location equals current location\n");
+		}
+
 		if (block_location != NULL) {
+			printf("Note: new block listing allocated, appended\n");
 			block_location->instn_block = (struct Instruction**)calloc(1, sizeof(struct Instruction*) * instn_blocksize);
 			if (block_location->instn_block != NULL) {
+				printf("Note: new block allocated, appended\n");
 				block_location->instn_block[pc % instn_blocksize] = data;
 			}
 			else {
@@ -124,9 +158,11 @@ void addinstruction(struct Instruction* data) {
 			}
 		}
 		else {
-			printf("Error in addinstruction: block listing allocation failed\n");
+			printf("Error in addinstruction: block listing allocation failed (2)\n");
 		}
 	}
+
+	pc++;
 }
 
 // Instruction get instruction
@@ -134,14 +170,18 @@ struct Instruction* getinstruction() {
 	struct Instruction* data = NULL;
 	struct Instn_Block_Listing* block_location = first_block;
 
+	printf("getinstruction: pc = %d\n", pc);
+
 	// Goto block listing that pc resides
 	for (int i = 0; i < pc / instn_blocksize; i++) {
 		if (block_location != NULL) {
 			// Goto next if possible
+			printf("Note: proceeding to block listing %d\n", i);
 			block_location = block_location->next_block;
 		}
 		else {
 			printf("Error in getinstruction: block listing does not exist\n");
+			return NULL;
 		}
 	}
 
@@ -152,10 +192,12 @@ struct Instruction* getinstruction() {
 		}
 		else {
 			printf("Error in getinstruction: block does not exist\n");
+			return NULL;
 		}
 	}
 	else {
-		printf("Error in getinstruction: block listing does not exist\n");
+		printf("Error in getinstruction: block listing does not exist (2)\n");
+		return NULL;
 	}
 
 	pc++;
