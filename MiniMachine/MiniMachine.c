@@ -80,7 +80,7 @@ void instn_fetch_deocde_test() {
 
 int main()
 {
-    loadinstructionset_full();
+    testinstnload();
 
     /*
     char* bigstring = "ABCDEF";

@@ -3,6 +3,6 @@
 #define INSTURCTIONEXECUTE_H
 
 void testmemory();
-void loadinstructionset_full();
+void testinstnload();
 
 #endif // !INSTRUCTIONEXECUTE_H
