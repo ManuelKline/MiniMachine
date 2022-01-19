@@ -22,7 +22,7 @@ void loadinstructionset_section(struct InstructionWord* words, int size) {
 
 
 void loadinstructionset_full() {
-	for (int i = 0; i < ARRAYSIZE(allwords); i++) {
-		loadinstructionset_section(allwords->words, allwords->size);
+	for (int i = 0; i < numberofsections; i++) {
+		loadinstructionset_section(allwords[i].words, allwords[i].size);
 	}
 }

@@ -47,11 +47,11 @@
 
 // Register move operations, 200-210 reserved
 #define TYPE_MOV			200	// Move immediate value into register 0. Use: MOV R0 [Immediate]
-#define TYPE_MOV_REG		201	// Move value in one register to another
+//#define TYPE_MOV_REG		201	// Move value in one register to another
 
 #define MOVOP_START			200
 #define MOVOP_END			210
-#define MOVOP_SIZE			2
+#define MOVOP_SIZE			1
 
 // Schema section
 
@@ -75,47 +75,15 @@ struct InstructionWordSection {
 
 // Data section
 
-struct InstructionWord systemop_words[] = {
-	{TYPE_NOP, "NOP"},
-	{TYPE_HALT, "HALT"}
-};
-
-struct InstructionWord branchop_words[] = {
-	{TYPE_BR, "BR"},
-	{TYPE_BEQ, "BEQ"},
-	{TYPE_BNE, "BNE"},
-	{TYPE_BG, "BG"},
-	{TYPE_BL, "BL"},
-	{TYPE_BGE, "BGE"},
-	{TYPE_BLE, "BLE"}
-};
-
-struct InstructionWord stackop_words[] = {
-	{TYPE_PUSH, "PUSH"},
-	{TYPE_POP, "POP"}
-};
-
-struct InstructionWord aluop_words[] = {
-	{TYPE_ADD, "ADD"},
-	{TYPE_SUB, "SUB"},
-	{TYPE_MUL, "MUL"},
-	{TYPE_DIV, "DIV"},
-	{TYPE_MOD, "MOD"}
-};
-
-struct InstructionWord movop_words[] = {
-	{TYPE_MOV, "MOV"}
-};
+extern struct InstructionWord systemop_words[];
+extern struct InstructionWord branchop_words[];
+extern struct InstructionWord stackop_words[];
+extern struct InstructionWord aluop_words[];
+extern struct InstructionWord movop_words[];
 
 // Summary of all instructions
-
-struct InstructionWordSection allwords[] = {
-	{SYSOP_START, SYSOP_END, SYSOP_SIZE, systemop_words},
-	{BRCOP_START, BRCOP_END, BRCOP_SIZE, branchop_words},
-	{STKOP_START, STKOP_END, STKOP_SIZE, stackop_words},
-	{ALUOP_START, ALUOP_END, ALUOP_SIZE, aluop_words},
-	{MOVOP_START, MOVOP_END, MOVOP_SIZE, movop_words}
-};
+extern struct InstructionWordSection allwords[];
+extern int numberofsections;
 
 #endif // !INSTRUCTION_H
 
