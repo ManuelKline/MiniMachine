@@ -241,4 +241,8 @@ DESIGN CONSIDERATIONS:
 
     Design Issue 5: Getting rid of the Java naming standards that have invaded my C standards.
         Solution 1: Instruction = instn, Instruction Fetch = instn_fetch, replace caps with underscoring.
+
+    Design Issue 6: Organizing the Instruction Set
+        Solution 1:
+            
 */

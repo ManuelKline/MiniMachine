@@ -2,6 +2,8 @@
 #ifndef INSTRUCTIONSET_H
 #define INSTRUCTIONSET_H
 
+// Constants:
+
 #define ARGUMENT_MAX		3	// Max number of arguments
 
 // Special (system) instructions, 0-9 reserved
@@ -51,5 +53,25 @@
 #define MOVOP_START			200
 #define MOVOP_END			210
 #define MOVOP_SIZE			1
+
+// Definitions:
+
+struct Instruction {
+	int type;
+	int args[ARGUMENT_MAX];
+	int numargs;
+};
+
+struct InstructionWord {
+	int type;
+	char* literal;
+};
+
+struct InstructionWordSection {
+	int start;
+	int stop;
+	int size;
+	struct InstructionWord* words;
+};
 
 #endif // !INSTRUCTIONSET_H

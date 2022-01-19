@@ -1,25 +1,6 @@
 #include "instructionset.h"
 
-
-struct Instruction {
-	int type;
-	int args[ARGUMENT_MAX];
-	int numargs;
-};
-
-struct InstructionWord {
-	int type;
-	char* literal;
-};
-
-struct InstructionWordSection {
-	int start;
-	int stop;
-	int size;
-	struct InstructionWord* words;
-};
-
-// Data section
+// Definitions:
 
 struct InstructionWord systemop_words[] = {
 	{TYPE_NOP, "NOP"},

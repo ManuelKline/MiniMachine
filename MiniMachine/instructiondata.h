@@ -1,31 +1,9 @@
 #pragma once
 
-#ifndef INSTRUCTION_H
-#define INSTRUCTION_H
+#ifndef INSTRUCTIONDATA_H
+#define INSTRUCTIONDATA_H
 
 #include "instructionset.h"
-
-// Schema section
-
-struct Instruction {
-	int type;
-	int args[ARGUMENT_MAX];
-	int numargs;
-};
-
-struct InstructionWord {
-	int type;
-	char* literal;
-};
-
-struct InstructionWordSection {
-	int start;
-	int stop;
-	int size;
-	struct InstructionWord* words;
-};
-
-// Data section
 
 extern struct InstructionWord systemop_words[];
 extern struct InstructionWord branchop_words[];
