@@ -244,5 +244,10 @@ DESIGN CONSIDERATIONS:
 
     Design Issue 6: Organizing the Instruction Set
         Solution 1:
-            
+            Package execution functions with files defining the instruction set.
+            Have "instructionset.h" define all types, instruction data structures
+            Have "instructiondata.h" and "instructiondata.c" be used for the sole purpose of loading the set to wordmatch.
+            Define a function in "instructiondata.c" that loads everything to wordmatch.
+            Move the struct definitions currently in "instructiondata.h" to "instructiondata.c".
+            "instructionexecute.c" defines functions executing instructions. It should NOT play with "instructiondata.h", it only needs "instructionset.h".
 */
