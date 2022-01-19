@@ -1,7 +1,8 @@
 #include "stdio.h"
 #include "string.h"
 #include "stdlib.h"
-#include "instruction.h"
+#include "instructiondata.h"
+#include "instructionset.h"
 
 #define ALPHABET_LENGTH 26
 #define MAX_WORD_LENGTH 64

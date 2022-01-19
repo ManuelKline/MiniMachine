@@ -1,6 +1,7 @@
 #include "stdio.h"
 #include "stdlib.h"
-#include "instruction.h"
+#include "instructionset.h"
+#include "instructiondata.h"
 
 #define INSTN_BLOCKSIZE_DEFAULT 4;				// Recommend 2048
 #define STACK_SIZE_DEFAULT 2048;

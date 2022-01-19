@@ -2,7 +2,8 @@
 #include "string.h"
 #include "stdlib.h"
 #include "wordmatch.h"
-#include "instruction.h"
+#include "instructiondata.h"
+#include "instructionset.h"
 #include "memoryfile.h"
 
 // Handy macro I found: https://stackoverflow.com/questions/37538/how-do-i-determine-the-size-of-my-array-in-c

@@ -139,7 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="instruction.c" />
+    <ClCompile Include="instructiondata.c" />
     <ClCompile Include="instructionDecode.c" />
     <ClCompile Include="instructionExecute.c" />
     <ClCompile Include="instructionFetch.c" />
@@ -148,10 +148,11 @@
     <ClCompile Include="wordmatch.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="instruction.h" />
+    <ClInclude Include="instructiondata.h" />
     <ClInclude Include="instructionDecode.h" />
     <ClInclude Include="instructionExecute.h" />
     <ClInclude Include="instructionFetch.h" />
+    <ClInclude Include="instructionset.h" />
     <ClInclude Include="memoryfile.h" />
     <ClInclude Include="token.h" />
     <ClInclude Include="wordmatch.h" />
