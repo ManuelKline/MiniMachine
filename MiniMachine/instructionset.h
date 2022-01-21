@@ -22,6 +22,7 @@
 #define TYPE_BL				14	// Branch if ARG1 < ARG2
 #define TYPE_BGE			15	// Branch if ARG1 >= ARG2
 #define TYPE_BLE			16	// Branch if ARG1 <= ARG2
+// Usage example: BLE 5 R0 R1
 
 #define BRCOP_START			10
 #define BRCOP_END			19
@@ -36,7 +37,7 @@
 #define STKOP_SIZE			2
 
 // Arithmetic Operations, 100-199 reserved, registers only (for now)
-#define TYPE_ADD			100	// Add Reg1 RegDest Reg2 (that is, let RegDest = Reg1 +  Reg2)
+#define TYPE_ADD			100	// Add RegDest Reg1 Reg2 (that is, let RegDest = Reg1 +  Reg2)
 #define TYPE_SUB			101	// Same thing but subtract
 #define TYPE_MUL			102	// Same thing but multiply
 #define TYPE_DIV			103 // Same thing but divide

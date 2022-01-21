@@ -2,7 +2,6 @@
 #ifndef INSTRUCTIONEXECUTE_H
 #define INSTURCTIONEXECUTE_H
 
-void testmemory();
-void testinstnload();
+void begin_execution();
 
 #endif // !INSTRUCTIONEXECUTE_H

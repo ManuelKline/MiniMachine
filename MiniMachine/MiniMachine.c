@@ -5,11 +5,12 @@
 #include "string.h"
 #include "stdlib.h"
 //#include "token.h"
-//#include "instructionDecode.h"
+#include "instructionDecode.h"
 #include "instructionExecute.h"
-//#include "instructionFetch.h"
-//#include "instruction.h"
-//#include "memoryfile.h"
+#include "instructionFetch.h"
+#include "instructionset.h"
+#include "instructiondata.h"
+#include "memoryfile.h"
 //#include "wordmatch.h"
 
 /*
@@ -80,7 +81,47 @@ void instn_fetch_deocde_test() {
 
 int main()
 {
-    testinstnload();
+    int debug_counter = 0;
+    char* instn_line = NULL;
+    struct Instruction* instn = NULL;
+
+    // Initialize globals
+    initialize(2048, 16);
+
+    // Load instruction set
+    loadinstructionset_full();
+
+    // Fetch instructions
+    open_file_read("example.txt");
+    while (1) {
+        instn_line = fetchinstruction();
+        if (strlen(instn_line) > 0) {
+            // Decode instruction, add to memory
+            addinstruction(decodeline(instn_line));
+        }
+        else {
+            break;
+        }
+
+        if (debug_counter > 16) {
+            break;
+        }
+        debug_counter++;
+    }
+    close_file();
+    debug_counter = 0;
+
+    printf("\n");
+    // Read instructions from instn memory
+    setpc(0);
+    begin_execution();
+
+    printf("\n");
+    printf("\n");
+
+    for (int i = 0; i < 8; i++) {
+        printf("Register %d value: %d\n", i, getreg(i));
+    }
 
     /*
     char* bigstring = "ABCDEF";
