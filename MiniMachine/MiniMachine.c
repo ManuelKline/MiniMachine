@@ -119,7 +119,7 @@ int main()
     printf("\n");
     printf("\n");
 
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < 16; i++) {
         printf("Register %d value: %d\n", i, getreg(i));
     }
 

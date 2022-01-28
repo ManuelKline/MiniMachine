@@ -184,6 +184,7 @@ struct Token* tokenize(char* input) {
 	int bufferIsSym = 0;
 	int bufferIsReg = 0;
 	int lastSawR = 0;
+	int negNum = 0;
 
 	if (input == NULL) {
 		return NULL;
@@ -199,7 +200,12 @@ struct Token* tokenize(char* input) {
 				// Create token based on type
 				if (bufferIsNum && !bufferIsSym && !bufferIsReg) {
 					//printf("Numerical token made with buffer: %s\n", buffer);
-					currentToken = createtoken(buffer, bufferSize, TOKEN_NUM, chartoint(buffer));
+					if (negNum) {
+						currentToken = createtoken(buffer, bufferSize, TOKEN_NUM, -1*chartoint(buffer));
+					}
+					else {
+						currentToken = createtoken(buffer, bufferSize, TOKEN_NUM, chartoint(buffer));
+					}
 				}
 				else if (!bufferIsNum && bufferIsSym && !bufferIsReg) {
 					//printf("Symbol token made with buffer: %s\n", buffer);
@@ -213,7 +219,7 @@ struct Token* tokenize(char* input) {
 					printf("Error: buffer is non-empty but is not clearly defined in type.\n");
 				}
 
-				bufferIsNum = bufferIsSym = bufferIsReg = bufferSize = 0;
+				bufferIsNum = bufferIsSym = bufferIsReg = bufferSize = negNum = 0;
 				free(buffer);
 				buffer = NULL;
 
@@ -294,9 +300,23 @@ struct Token* tokenize(char* input) {
 			}
 			//printf("Buffer: %s\n", buffer);
 		}
+		// Else if character is a negative
+		else if (input[i] == '-') {
+			// If buffer has anything, this is invalid
+			if (bufferIsSym || bufferIsReg || bufferIsNum) {
+				printf("Error: negative symbol read, but characters preceeding it\n");
+				free(buffer);
+				exit(0);
+			}
+			else {
+				negNum = 1;
+				bufferIsNum = 1;
+			}
+		}
 		// Else, character is invalid
 		else {
 			printf("Error: invalid character\n");
+			exit(0);
 			break;
 		}
 	}
