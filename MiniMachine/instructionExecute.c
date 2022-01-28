@@ -117,6 +117,7 @@ void execute_system_type(struct Instruction* instrn) {
 		instrn_halt();
 		break;
 	default:
+		printf("Instruction not found in execution\n");
 		break;
 	}
 }
@@ -146,6 +147,7 @@ void execute_branch_type(struct Instruction* instrn) {
 		instrn_ble(instrn->args[0], instrn->args[1], instrn->args[2]);
 		break;
 	default:
+		printf("Instruction not found in execution\n");
 		break;
 	}
 }
@@ -160,6 +162,7 @@ void execute_stack_type(struct Instruction* instrn) {
 		instrn_pop(instrn->args[0]);
 		break;
 	default:
+		printf("Instruction not found in execution\n");
 		break;
 	}
 }
@@ -183,6 +186,7 @@ void execute_alu_type(struct Instruction* instrn) {
 		instrn_mod(instrn->args[0], instrn->args[1], instrn->args[2]);
 		break;
 	default:
+		printf("Instruction not found in execution\n");
 		break;
 	}
 }
@@ -194,6 +198,7 @@ void execute_move_type(struct Instruction* instrn) {
 		instrn_mov(instrn->args[0], instrn->args[1]);
 		break;
 	default:
+		printf("Instruction not found in execution\n");
 		break;
 	}
 }

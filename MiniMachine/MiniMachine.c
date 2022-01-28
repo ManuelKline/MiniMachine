@@ -103,13 +103,9 @@ int main()
             break;
         }
 
-        if (debug_counter > 16) {
-            break;
-        }
         debug_counter++;
     }
     close_file();
-    debug_counter = 0;
 
     printf("\n");
     // Read instructions from instn memory

@@ -201,6 +201,9 @@ struct Instruction* getinstruction() {
 	}
 
 	pc++;
+
+	//printf("getinstruction returning: type = %d\n", data->type);
+
 	return data;
 }
 
