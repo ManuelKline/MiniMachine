@@ -37,7 +37,8 @@ void push(int data) {
 		stack[sp] = data;
 	}
 	else {
-		// Error
+		printf("Error in push: stack size exceeded\n");
+		exit(1);
 	}
 }
 
@@ -50,7 +51,8 @@ int pop() {
 		sp--;
 	}
 	else {
-		// Error
+		printf("Error in pop: stack pointer <= -1\n");
+		exit(1);
 	}
 
 	return data;
@@ -68,6 +70,7 @@ void setpc(int location) {
 	}
 	else {
 		printf("Error in setpc: failed to set pc to argument\n");
+		exit(1);
 	}
 }
 
@@ -116,6 +119,7 @@ void addinstruction(struct Instruction* data) {
 			}
 			else {
 				printf("Error in addinstruction: block listing allocation failed\n");
+				exit(1);
 			}
 		}
 	}
@@ -133,6 +137,7 @@ void addinstruction(struct Instruction* data) {
 			}
 			else {
 				printf("Error in addinstruction: block allocation failed\n");
+				exit(1);
 			}
 		}
 	}
@@ -155,10 +160,12 @@ void addinstruction(struct Instruction* data) {
 			}
 			else {
 				printf("Error in addinstruction: block allocation failed\n");
+				exit(1);
 			}
 		}
 		else {
 			printf("Error in addinstruction: block listing allocation failed (2)\n");
+			exit(1);
 		}
 	}
 
@@ -180,7 +187,7 @@ struct Instruction* getinstruction() {
 			block_location = block_location->next_block;
 		}
 		else {
-			printf("Error in getinstruction: block listing does not exist\n");
+			printf("Error in getinstruction: block listing does not exist, stop program\n");
 			return NULL;
 		}
 	}
@@ -196,7 +203,7 @@ struct Instruction* getinstruction() {
 		}
 	}
 	else {
-		printf("Error in getinstruction: block listing does not exist (2)\n");
+		printf("Error in getinstruction: block listing does not exist, stop program (2)\n");
 		return NULL;
 	}
 
@@ -215,7 +222,8 @@ int getreg(int regnum) {
 		data = regfile[regnum];
 	}
 	else {
-		// Error
+		printf("Error in getreg: invalid register derefernce\n");
+		exit(1);
 	}
 
 	return data;
@@ -227,7 +235,8 @@ void setreg(int regnum, int data) {
 		regfile[regnum] = data;
 	}
 	else {
-		// Error
+		printf("Error in setreg: invalid register derefernce\n");
+		exit(1);
 	}
 }
 
@@ -256,6 +265,7 @@ void initialize(unsigned int stacksize, unsigned int regfilesize) {
 	first_block = (struct Instn_Block_Listing*)calloc(1, sizeof(struct Instn_Block_Listing));
 	if (first_block == NULL) {
 		printf("Error in initialize: first_block failed malloc\n");
+		exit(1);
 	}
 	else {
 		// Allocate first block (array of pointers to instructions)

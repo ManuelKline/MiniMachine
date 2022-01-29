@@ -71,15 +71,16 @@ int getline(char** lineptr, FILE* stream) {
 		//printf("getline: calloc done\n");
 	}
 
-	//printf("getline: lineptr ready\n");
-
+	// Get the first character
 	data = fgetc(stream);
-	//printf("getline: fgetc done\n");
+	// If first character indicates EOF, return -1
+	if (data == EOF) {
+		return -1;
+	}
+
+	// This loop generates the full line
 	while (data != EOF && data != '\n') {
-		//printf("getline lineptr: %s\n", *lineptr);
-		//printf("getline: calling append with data: %d\n", data);
 		*lineptr = append_if(*lineptr, data);
-		//printf("getline: append done\n");
 		if (*lineptr == NULL) {
 			printf("Error in getline: append returned null pointer\n");
 			return -1;
