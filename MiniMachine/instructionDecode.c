@@ -82,10 +82,12 @@ char* slice(char* source, unsigned int start, unsigned int end) {
 		}
 		else {
 			printf("Error in slice: dest calloc failed, or end index is too large\n");
+			exit(1);
 		}
 	}
 	else {
 		printf("Error in slice: end < start, or source is null\n");
+		exit(1);
 	}
 
 	return dest;
@@ -217,6 +219,7 @@ struct Token* tokenize(char* input) {
 				}
 				else {
 					printf("Error: buffer is non-empty but is not clearly defined in type.\n");
+					exit(1);
 				}
 
 				bufferIsNum = bufferIsSym = bufferIsReg = bufferSize = negNum = 0;
@@ -247,13 +250,15 @@ struct Token* tokenize(char* input) {
 				printf("Error: alpha read and buffer has numbers\n");
 				bufferIsNum = bufferIsSym = bufferIsReg = bufferSize = 0;
 				free(buffer);
+				exit(1);
 				break;
 			}
 			else if (!bufferIsNum && bufferIsReg) {
 				// Throw error, clear buffer, reset bools
-				printf("Error: alpha read and buffer has comprises register\n");
+				printf("Error: alpha read and buffer comprises register\n");
 				bufferIsNum = bufferIsSym = bufferIsReg = bufferSize = 0;
 				free(buffer);
+				exit(1);
 				break;
 			}
 			else {
@@ -284,6 +289,7 @@ struct Token* tokenize(char* input) {
 					printf("Error: number read and buffer has alphas\n");
 					bufferIsNum = bufferIsSym = bufferIsReg = bufferSize = 0;
 					free(buffer);
+					exit(1);
 					break;
 				}
 			}
@@ -306,7 +312,7 @@ struct Token* tokenize(char* input) {
 			if (bufferIsSym || bufferIsReg || bufferIsNum) {
 				printf("Error: negative symbol read, but characters preceeding it\n");
 				free(buffer);
-				exit(0);
+				exit(1);
 			}
 			else {
 				negNum = 1;
@@ -316,7 +322,7 @@ struct Token* tokenize(char* input) {
 		// Else, character is invalid
 		else {
 			printf("Error: invalid character\n");
-			exit(0);
+			exit(1);
 			break;
 		}
 	}
@@ -348,6 +354,7 @@ struct Instruction* instructionize(struct Token* firstToken) {
 			}
 			else {
 				printf("Error in decode: two symbol tokens present\n");
+				exit(1);
 			}
 			break;
 		case TOKEN_NUM:
@@ -359,10 +366,12 @@ struct Instruction* instructionize(struct Token* firstToken) {
 				}
 				else {
 					printf("Error in decode: Exceeding max number of args\n");
+					exit(1);
 				}
 			}
 			else {
 				printf("Error in decode: first token is register, not a command\n");
+				exit(1);
 			}
 			break;
 		case TOKEN_REG:
@@ -374,14 +383,17 @@ struct Instruction* instructionize(struct Token* firstToken) {
 				}
 				else {
 					printf("Error in decode: Exceeding max number of args\n");
+					exit(1);
 				}
 			}
 			else {
 				printf("Error in decode: first token is register, not a command\n");
+				exit(1);
 			}
 			break;
 		default:
 			printf("Error in decode: instruction type undefined\n");
+			exit(1);
 			break;
 		}
 
@@ -395,7 +407,5 @@ struct Instruction* instructionize(struct Token* firstToken) {
 }
 
 struct Instruction* decodeline(char* input) {
-	// TODO: Put instruction into instruction memory
-
 	return instructionize(tokenize(input));
 }
