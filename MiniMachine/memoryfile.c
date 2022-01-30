@@ -86,11 +86,17 @@ void addinstruction(struct Instruction* data) {
 	struct Instn_Block_Listing* prev_location = first_block;
 
 	printf("addinstruction: pc = %d\n", pc);
+	printf("Type: %d\n", data->type);
+	printf("Arg 1: Type = %d, Value 1 = %d\n", data->args[0].type, data->args[0].value_primary);
+	printf("Arg 2: Type = %d, Value 1 = %d\n", data->args[1].type, data->args[1].value_primary);
+	printf("Arg 3: Type = %d, Value 1 = %d\n", data->args[2].type, data->args[2].value_primary);
+	printf("Number of valid arguments = %d\n", data->numargs);
+	printf("\n");
 
 	// Goto block listing that pc resides in
 	for (int i = 0; i < pc / instn_blocksize; i++) {
 		if (block_location != NULL) {
-			printf("Note: proceeding to block listing %d\n", i);
+			//printf("Note: proceeding to block listing %d\n", i);
 			// Record current location as previous
 			prev_location = block_location;
 			
@@ -104,7 +110,7 @@ void addinstruction(struct Instruction* data) {
 			// Allocate new block
 			block_location = (struct Instn_Block_Listing*)calloc(1, sizeof(struct Instn_Block_Listing));
 			if (block_location != NULL) {
-				printf("Note: new block listing allocated, index: %d\n", i);
+				//printf("Note: new block listing allocated, index: %d\n", i);
 				// Connect previous listing with current one
 				prev_location->next_block = block_location;
 
@@ -132,7 +138,7 @@ void addinstruction(struct Instruction* data) {
 		else {
 			block_location->instn_block = (struct Instruction**)calloc(1, sizeof(struct Instruction*) * instn_blocksize);
 			if (block_location->instn_block != NULL) {
-				printf("Note: new block allocated, listing already exists\n");
+				//printf("Note: new block allocated, listing already exists\n");
 				block_location->instn_block[pc % instn_blocksize] = data;
 			}
 			else {
@@ -152,10 +158,10 @@ void addinstruction(struct Instruction* data) {
 		}
 
 		if (block_location != NULL) {
-			printf("Note: new block listing allocated, appended\n");
+			//printf("Note: new block listing allocated, appended\n");
 			block_location->instn_block = (struct Instruction**)calloc(1, sizeof(struct Instruction*) * instn_blocksize);
 			if (block_location->instn_block != NULL) {
-				printf("Note: new block allocated, appended\n");
+				//printf("Note: new block allocated, appended\n");
 				block_location->instn_block[pc % instn_blocksize] = data;
 			}
 			else {
@@ -183,7 +189,7 @@ struct Instruction* getinstruction() {
 	for (int i = 0; i < pc / instn_blocksize; i++) {
 		if (block_location != NULL) {
 			// Goto next if possible
-			printf("Note: proceeding to block listing %d\n", i);
+			//printf("Note: proceeding to block listing %d\n", i);
 			block_location = block_location->next_block;
 		}
 		else {
@@ -222,7 +228,7 @@ int getreg(int regnum) {
 		data = regfile[regnum];
 	}
 	else {
-		printf("Error in getreg: invalid register derefernce\n");
+		printf("Error in getreg: invalid register derefernce (value = %d)\n", regnum);
 		exit(1);
 	}
 
@@ -235,7 +241,7 @@ void setreg(int regnum, int data) {
 		regfile[regnum] = data;
 	}
 	else {
-		printf("Error in setreg: invalid register derefernce\n");
+		printf("Error in setreg: invalid register derefernce (value = %d)\n", regnum);
 		exit(1);
 	}
 }

@@ -3,7 +3,6 @@
 #define INSTRUCTIONSET_H
 
 // Constants:
-
 #define ARGUMENT_MAX		3	// Max number of arguments
 
 // Special (system) instructions, 0-9 reserved
@@ -55,11 +54,25 @@
 #define MOVOP_END			210
 #define MOVOP_SIZE			1
 
+// Argument section:
+#define ARG_NUL 0	// Null argument - doesn't exist.
+#define ARG_REG 1	// Register argument - a register number to be fetched
+#define ARG_IMM 2	// Immediate argument - an immediate number
+#define ARG_ADR	3	// Address argument (planned to be used for memory ops)
+#define ARG_OFS 4	// Offset argument (planned to be used for memory ops)
+
 // Definitions:
+
+struct Argument {
+	int type;
+	int value_primary;		// Primary value - often the only one that matters.
+	int value_secondary;	// Secondary value - when a number becomes two-dimensional.
+	int value_tertiary;		// Tertiary value - don't know what I'd use this for, but it's there.
+};
 
 struct Instruction {
 	int type;
-	int args[ARGUMENT_MAX];
+	struct Argument args[ARGUMENT_MAX];
 	int numargs;
 };
 

@@ -160,7 +160,7 @@ struct Token* createtoken(char* literal, int literalSize, int type, int value) {
 	return newToken;
 }
 
-struct Instruction* createinstruction(int type, int arg1, int arg2, int arg3, int argnum) {
+struct Instruction* createinstruction(int type, struct Argument arg1, struct Argument arg2, struct Argument arg3, int argnum) {
 	struct Instruction* newInst = (struct Instruction*)calloc(1, sizeof(struct Instruction));
 
 	// Set values if successful
@@ -173,6 +173,19 @@ struct Instruction* createinstruction(int type, int arg1, int arg2, int arg3, in
 	}
 
 	return newInst;
+}
+
+struct Argument* create_arg(int type, int value1, int value2, int value3) {
+	struct Argument* newArg = (struct Argument*)calloc(1, sizeof(struct Argument));
+
+	if (newArg != NULL) {
+		newArg->type = type;
+		newArg->value_primary = value1;
+		newArg->value_secondary = value2;
+		newArg->value_tertiary = value3;
+	}
+
+	return newArg;
 }
 
 // tokenize: take a single line and convert it to tokens
@@ -363,8 +376,9 @@ struct Instruction* instructionize(struct Token* firstToken) {
 		case TOKEN_NUM:
 			if (sym_counter) {
 				if (numargs < ARGUMENT_MAX) {
-					// Insert numerical value at args[numargs]
-					inst->args[numargs] = currentToken->value;
+					// Insert type and numerical value at args[numargs]
+					inst->args[numargs].type = ARG_IMM;
+					inst->args[numargs].value_primary = currentToken->value;
 					numargs++;
 				}
 				else {
@@ -380,8 +394,9 @@ struct Instruction* instructionize(struct Token* firstToken) {
 		case TOKEN_REG:
 			if (sym_counter) {
 				if (numargs < ARGUMENT_MAX) {
-					// Insert numerical value at args[numargs]
-					inst->args[numargs] = currentToken->value;
+					// Inserttype and numerical value at args[numargs]
+					inst->args[numargs].type = ARG_REG;
+					inst->args[numargs].value_primary = currentToken->value;
 					numargs++;
 				}
 				else {

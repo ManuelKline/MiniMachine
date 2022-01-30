@@ -10,100 +10,166 @@
 // https://math.hws.edu/bridgeman/courses/331/f05/handouts/c-c++-notes.html
 // Might be useful here, when efficiency becomes more important
 
+// Argument extraction function
+int arg_extract(struct Argument* arg) {
+	switch (arg->type)
+	{
+	case ARG_REG:
+		return getreg(arg->value_primary);
+		break;
+	case ARG_IMM:
+		return arg->value_primary;
+		break;
+	default:
+		printf("Warning in arg_extract_value: argument %d type not supported\n", arg->type);
+		return 0;
+		break;
+	}
+}
+
 void instrn_halt() {
 	exit(0);
 }
 
 // BRANCH INSTRUCTIONS:
-
-void instrn_br(int relative_loc) {
-	addpc(relative_loc);
+void instrn_br(struct Argument arg1) {
+	addpc(arg_extract(&arg1));
 }
 
-void instrn_beq(int relative_loc, int reg1, int reg2) {
-	if (getreg(reg1) == getreg(reg2)) {
-		addpc(relative_loc);
+void instrn_beq(struct Argument arg1, struct Argument arg2, struct Argument arg3) {
+	if (arg_extract(&arg2) == arg_extract(&arg3)) {
+		addpc(arg_extract(&arg1));
 	}
 }
 
-void instrn_bne(int relative_loc, int reg1, int reg2) {
-	if (getreg(reg1) != getreg(reg2)) {
-		addpc(relative_loc);
+void instrn_bne(struct Argument arg1, struct Argument arg2, struct Argument arg3) {
+	if (arg_extract(&arg2) != arg_extract(&arg3)) {
+		addpc(arg_extract(&arg1));
 	}
 }
 
-void instrn_bg(int relative_loc, int reg1, int reg2) {
-	if (getreg(reg1) > getreg(reg2)) {
-		addpc(relative_loc);
+void instrn_bg(struct Argument arg1, struct Argument arg2, struct Argument arg3) {
+	if (arg_extract(&arg2) > arg_extract(&arg3)) {
+		addpc(arg_extract(&arg1));
 	}
 }
 
-void instrn_bl(int relative_loc, int reg1, int reg2) {
-	if (getreg(reg1) < getreg(reg2)) {
-		addpc(relative_loc);
+void instrn_bl(struct Argument arg1, struct Argument arg2, struct Argument arg3) {
+	if (arg_extract(&arg2) < arg_extract(&arg3)) {
+		addpc(arg_extract(&arg1));
 	}
 }
 
-void instrn_bge(int relative_loc, int reg1, int reg2) {
-	if (getreg(reg1) >= getreg(reg2)) {
-		addpc(relative_loc);
+void instrn_bge(struct Argument arg1, struct Argument arg2, struct Argument arg3) {
+	if (arg_extract(&arg2) >= arg_extract(&arg3)) {
+		addpc(arg_extract(&arg1));
 	}
 }
 
-void instrn_ble(int relative_loc, int reg1, int reg2) {
-	if (getreg(reg1) <= getreg(reg2)) {
-		addpc(relative_loc);
+void instrn_ble(struct Argument arg1, struct Argument arg2, struct Argument arg3) {
+	if (arg_extract(&arg2) <= arg_extract(&arg3)) {
+		addpc(arg_extract(&arg1));
 	}
 }
 
 // STACK INSTRUCTIONS:
 
-void instrn_push(int reg) {
-	push(getreg(reg));
+// Can push either immediate or register value
+void instrn_push(struct Argument arg1) {
+	push(arg_extract(&arg1));
 }
 
-void instrn_pop(int destreg) {
+// Can pop into register, must be valid argument
+void instrn_pop(struct Argument arg1) {
+	// Check argument
+	if (arg1.type != ARG_REG) {
+		printf("Error in instrn_pop: destination is not a register\n");
+		exit(1);
+	}
+
 	int data = pop();
 
-	setreg(destreg, data);
+	setreg(arg1.value_primary, data);
 }
 
 // ARITHMETIC OPERATIONS:
 
-void instrn_add(int reg_dest, int reg_arg1, int reg_arg2) {
-	int result = getreg(reg_arg1) + getreg(reg_arg2);
+void instrn_add(struct Argument arg1, struct Argument arg2, struct Argument arg3) {
+	// Check that destination is valid
+	if (arg1.type != ARG_REG) {
+		printf("Error in instrn_add: destination is not a register\n");
+		exit(1);
+	}
 
-	setreg(reg_dest, result);
+	int result = arg_extract(&arg2) + arg_extract(&arg3);
+
+	setreg(arg1.value_primary, result);
 }
 
-void instrn_sub(int reg_dest, int reg_arg1, int reg_arg2) {
-	int result = getreg(reg_arg1) - getreg(reg_arg2);
+void instrn_sub(struct Argument arg1, struct Argument arg2, struct Argument arg3) {
+	// Check that destination is valid
+	if (arg1.type != ARG_REG) {
+		printf("Error in instrn_syb: destination is not a register\n");
+		exit(1);
+	}
 
-	setreg(reg_dest, result);
+	int result = arg_extract(&arg2) - arg_extract(&arg3);
+
+	setreg(arg1.value_primary, result);
 }
 
-void instrn_mul(int reg_dest, int reg_arg1, int reg_arg2) {
-	int result = getreg(reg_arg1) * getreg(reg_arg2);
+void instrn_mul(struct Argument arg1, struct Argument arg2, struct Argument arg3) {
+	// Check that destination is valid
+	if (arg1.type != ARG_REG) {
+		printf("Error in instrn_mul: destination is not a register\n");
+		exit(1);
+	}
 
-	setreg(reg_dest, result);
+	int result = arg_extract(&arg2) * arg_extract(&arg3);
+
+	setreg(arg1.value_primary, result);
 }
 
-void instrn_div(int reg_dest, int reg_arg1, int reg_arg2) {
-	int result = getreg(reg_arg1) / getreg(reg_arg2);
+void instrn_div(struct Argument arg1, struct Argument arg2, struct Argument arg3) {
+	// Check that destination is valid
+	if (arg1.type != ARG_REG) {
+		printf("Error in instrn_div: destination is not a register\n");
+		exit(1);
+	}
 
-	setreg(reg_dest, result);
+	int result = arg_extract(&arg2) / arg_extract(&arg3);
+
+	setreg(arg1.value_primary, result);
 }
 
-void instrn_mod(int reg_dest, int reg_arg1, int reg_arg2) {
-	int result = getreg(reg_arg1) % getreg(reg_arg2);
+void instrn_mod(struct Argument arg1, struct Argument arg2, struct Argument arg3) {
+	// Check that destination is valid
+	if (arg1.type != ARG_REG) {
+		printf("Error in instrn_mod: destination is not a register\n");
+		exit(1);
+	}
 
-	setreg(reg_dest, result);
+	int result = arg_extract(&arg2) % arg_extract(&arg3);
+
+	setreg(arg1.value_primary, result);
 }
 
 // MOVE INSTRUCTIONS
 
-void instrn_mov(int reg_dest, int immediate) {
-	setreg(reg_dest, immediate);
+// Destination (arg1) must be register
+// Source may be register or immediate
+void instrn_mov(struct Argument arg1, struct Argument arg2) {
+	if (arg1.type != ARG_REG) {
+		printf("Error in instrn_mov: destination is not a register\n");
+		exit(1);
+	}
+
+	if (arg2.type != ARG_REG && arg2.type != ARG_IMM) {
+		printf("Error in instrn_mov: source is not a register nor immediate\n");
+		exit(1);
+	}
+
+	setreg(arg1.value_primary, arg_extract(&arg2));
 }
 
 // Rudimentary switching functions:
@@ -124,6 +190,7 @@ void execute_system_type(struct Instruction* instrn) {
 }
 
 void execute_branch_type(struct Instruction* instrn) {
+	
 	switch (instrn->type)
 	{
 	case TYPE_BR:
@@ -155,6 +222,7 @@ void execute_branch_type(struct Instruction* instrn) {
 }
 
 void execute_stack_type(struct Instruction* instrn) {
+
 	switch (instrn->type)
 	{
 	case TYPE_PUSH:
@@ -171,6 +239,7 @@ void execute_stack_type(struct Instruction* instrn) {
 }
 
 void execute_alu_type(struct Instruction* instrn) {
+
 	switch (instrn->type)
 	{
 	case TYPE_ADD:
@@ -196,6 +265,7 @@ void execute_alu_type(struct Instruction* instrn) {
 }
 
 void execute_move_type(struct Instruction* instrn) {
+
 	switch (instrn->type)
 	{
 	case TYPE_MOV:
