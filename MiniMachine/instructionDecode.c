@@ -351,6 +351,9 @@ struct Instruction* instructionize(struct Token* firstToken) {
 				sym_counter++;
 				// Use wordmatch to find specific command
 				inst->type = find_word(currentToken->literal);
+				if (inst->type == -1) {
+					printf("Note: unknown instruction: %s\n", currentToken->literal);
+				}
 			}
 			else {
 				printf("Error in decode: two symbol tokens present\n");
