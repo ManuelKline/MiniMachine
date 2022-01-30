@@ -352,7 +352,7 @@ struct Instruction* instructionize(struct Token* firstToken) {
 				// Use wordmatch to find specific command
 				inst->type = find_word(currentToken->literal);
 				if (inst->type == -1) {
-					printf("Note: unknown instruction: %s\n", currentToken->literal);
+					printf("Warning: unknown instruction: %s\n", currentToken->literal);
 				}
 			}
 			else {

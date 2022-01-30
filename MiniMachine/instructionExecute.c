@@ -230,6 +230,9 @@ int filter_type(struct Instruction* instrn) {
 	else if (type >= MOVOP_START && type <= MOVOP_END) {
 		execute_move_type(instrn);
 	}
+	else {
+		printf("Warning: instruction type fits no category!\n");
+	}
 
 	return 0;
 }
