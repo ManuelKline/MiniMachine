@@ -41,6 +41,7 @@
 #define ERR_TOO_LONG 2
 #define ERR_NOT_FOUND 3
 #define ERR_NULL_PTR 4
+#define ERR_MALLOC 5
 
 // Warning codes:
 #define WARN_CAP_FOUND 11
@@ -122,6 +123,9 @@ void print_error(const int code, const char* function, const int linenum) {
     case ERR_NULL_PTR:
         printf("A null pointer was passed to the function\n.");
         break;
+    case ERR_MALLOC:
+        printf("Malloc/calloc returned null\n");
+        break;
     }
 }
 
@@ -146,6 +150,11 @@ int dict_append(char* word) {
     // If dictionary is empty, create first entry
     if (dictRoot == NULL) {
         dictRoot = (struct DictEntry*)calloc(1, sizeof(struct DictEntry));
+        if (dictRoot == NULL) {
+            print_error(ERR_MALLOC, __func__, __LINE__);
+            exit(1);
+        }
+
         dictRoot->wordNum = loopIndex;
         dictRoot->exists = 0;
         dictRoot->word = NULL;
@@ -164,6 +173,11 @@ int dict_append(char* word) {
             // Allocate memory for new word and copy
             size_t length = strlen(word) + 1;
             currentEntry->word = (char*)calloc(1, length);
+            if (currentEntry->word == NULL) {
+                print_error(ERR_MALLOC, __func__, __LINE__);
+                exit(1);
+            }
+
             strcpy_s(currentEntry->word, length, word);
             // Declare that is exists
             currentEntry->exists = 1;
@@ -176,6 +190,11 @@ int dict_append(char* word) {
             if (currentEntry->nextEntry == NULL) {
                 // Create the next entry
                 currentEntry->nextEntry = (struct DictEntry*)calloc(1, sizeof(struct DictEntry));
+                if (currentEntry->nextEntry == NULL) {
+                    print_error(ERR_MALLOC, __func__, __LINE__);
+                    exit(1);
+                }
+
                 // Set defaults, let wordNum = current loop iteration
                 currentEntry->nextEntry->wordNum = loopIndex + 1;
                 currentEntry->nextEntry->exists = 0;
@@ -219,7 +238,6 @@ int dict_remove(int wordIdVal) {
             if (currentEntry->wordNum == wordIdVal) {
                 // Set non-existant, and end
                 currentEntry->exists = 0;
-                //printf("Removal success\n");
                 break;
             }
             else {
@@ -270,9 +288,6 @@ int word_verify(char* word) {
                 if (word[i] < ASCII_A_CAP || word[i] > ASCII_Z_CAP) {
                     returnVal = ERR_NOT_ALPHA;
                 }
-                //else {
-                //    returnVal = WARN_CAP_FOUND;
-                //}
             }
         }
     }
@@ -293,15 +308,9 @@ int word_verify(char* word) {
 char* word_decap(char* word) {
     char* newString = NULL;
     size_t length = strlen(word);
-    //printf("Malloc size: %d\n", sizeof(char*));
     newString = malloc(length + 1);
-    //printf("Parameter: %s\n", word);
-    ////printf("Length of Parameter: %d\n", strlen(word));
-    //printf("Size of Parameter: %d\n", sizeof(word));
-    //printf("Length of newString: %d\n", strlen(newString));
+    
     // Copy string
-
-    //printf("Arguments: %s, %d, %s\n", newString, length, word);
     if (newString != NULL) {
         strcpy_s(newString, length + 1, word);
     }
@@ -360,7 +369,6 @@ int find_word(char* word) {
 
     // Decapitalize word after being verified for alpha only chars.
     char* word_safe = word_decap(word);
-    //printf("Find word new parameter: %s\n", word_safe);
 
     for (unsigned int i = 0; i < strlen(word_safe); i++) {
         char letter = word_safe[i] - 'a';    // Index of letter in alphabet, normalized
@@ -368,14 +376,12 @@ int find_word(char* word) {
             current = current->children[letter];    // Jump to next node
         }
         else {  // Else, the word does not exist
-            //returnVal = -1;
             break;
         }
     }
 
     // if search ended and current node is valid:
     if (current->validity & VALID_BIT) {
-        //returnVal = -1;
         returnVal = current->instruction_type;
     }
 
@@ -409,22 +415,19 @@ void add_word(char* word, int insttype) {
 
     for (unsigned int i = 0; i < strlen(word_safe); i++) {
         char letter = word_safe[i] - 'a';    // Index of letter in alphabet, normalized
-        //printf("Loop Index: %d\n", i);
-        //printf("Validity Initial: %lu\n", current->validity);
-        //current->validity = current->validity | AlphaMap[letter];   // Set valid bit for corresponding letter
-        //printf("Validity Final: %lu\n", current->validity);
         if ((current->validity & AlphaMap[letter]) && current->children[letter]) {    // If next node already exists
-            //printf("Node has children, progressing\n");
             current->validity = current->validity | AlphaMap[letter];
-            //printf("Validity Final: %lu\n", current->validity);
             current = current->children[letter];
         }
         else {  // Else, create new node
-            //printf("Node lacks child, allocating\n");
             current->validity = current->validity | AlphaMap[letter];
-            //printf("Validity Final: %lu\n", current->validity);
             // Use calloc to zero all allocated memory
             current->children[letter] = (struct Node*)calloc(1, sizeof(struct Node));
+            if (current->children[letter] == NULL) {
+                print_error(ERR_MALLOC, __func__, __LINE__);
+                exit(1);
+            }
+
             current = current->children[letter];
             // Set validity to default
             current->validity = 0;
@@ -530,20 +533,16 @@ void print_dict() {
 
 // Recursive function for freeing tree, should begin with root
 void free_tree(struct Node* node) {
-    //printf("free_tree: Validity: %lu, Word ID: %d\n", node->validity, node->wordId);
     for (unsigned int i = 0; i < ALPHABET_LENGTH; i++) {
         if (node->validity & AlphaMap[i]) {
-            //printf("Attempting to call free_tree on child %d\n", i);
             free_tree(node->children[i]);
         }
     }
 
     if (node == &root) {
-        //printf("Returned to root, no free.\n");
         return;
     }
 
-    //printf("Attempting to free: Validity: %lu, Word ID: %d\n", node->validity, node->wordId);
     free(node);
     return;
 }

@@ -23,10 +23,6 @@ static struct Instn_Block_Listing* first_block = NULL;
 static unsigned int instn_blocksize = INSTN_BLOCKSIZE_DEFAULT;
 static int pc = 0;
 
-// !*****! DEPRECATED !*****!:
-static int mem_instmemsize = 0;
-static struct Instruction** instMemory = NULL;	// Array of pointers to instructions
-
 // Initialization Boolean
 static int initialized = 0;
 
@@ -96,21 +92,16 @@ void addinstruction(struct Instruction* data) {
 	// Goto block listing that pc resides in
 	for (int i = 0; i < pc / instn_blocksize; i++) {
 		if (block_location != NULL) {
-			//printf("Note: proceeding to block listing %d\n", i);
 			// Record current location as previous
 			prev_location = block_location;
 			
 			// Get to next location
 			block_location = block_location->next_block;
-
-			// Get previous location's next pointer
-			//prev_location->next_block = block_location;
 		}
 		else {
 			// Allocate new block
 			block_location = (struct Instn_Block_Listing*)calloc(1, sizeof(struct Instn_Block_Listing));
 			if (block_location != NULL) {
-				//printf("Note: new block listing allocated, index: %d\n", i);
 				// Connect previous listing with current one
 				prev_location->next_block = block_location;
 
@@ -119,9 +110,6 @@ void addinstruction(struct Instruction* data) {
 
 				// Get to next location
 				block_location = block_location->next_block;
-
-				// Get previous location's next pointer
-				//prev_location->next_block = block_location;
 			}
 			else {
 				printf("Error in addinstruction: block listing allocation failed\n");
@@ -138,7 +126,6 @@ void addinstruction(struct Instruction* data) {
 		else {
 			block_location->instn_block = (struct Instruction**)calloc(1, sizeof(struct Instruction*) * instn_blocksize);
 			if (block_location->instn_block != NULL) {
-				//printf("Note: new block allocated, listing already exists\n");
 				block_location->instn_block[pc % instn_blocksize] = data;
 			}
 			else {
@@ -161,7 +148,6 @@ void addinstruction(struct Instruction* data) {
 			//printf("Note: new block listing allocated, appended\n");
 			block_location->instn_block = (struct Instruction**)calloc(1, sizeof(struct Instruction*) * instn_blocksize);
 			if (block_location->instn_block != NULL) {
-				//printf("Note: new block allocated, appended\n");
 				block_location->instn_block[pc % instn_blocksize] = data;
 			}
 			else {
@@ -189,7 +175,6 @@ struct Instruction* getinstruction() {
 	for (int i = 0; i < pc / instn_blocksize; i++) {
 		if (block_location != NULL) {
 			// Goto next if possible
-			//printf("Note: proceeding to block listing %d\n", i);
 			block_location = block_location->next_block;
 		}
 		else {
@@ -214,8 +199,6 @@ struct Instruction* getinstruction() {
 	}
 
 	pc++;
-
-	//printf("getinstruction returning: type = %d\n", data->type);
 
 	return data;
 }
@@ -260,12 +243,10 @@ void checkinitialized() {
 void initialize(unsigned int stacksize, unsigned int regfilesize) {
 	mem_stacksize = stacksize;
 	mem_regfilesize = regfilesize;
-	//mem_instmemsize = instmemsize;
 
 	// Allocate to stack and register files as arrays of ints
 	stack = (int*)malloc(sizeof(int) * stacksize);
 	regfile = (int*)malloc(sizeof(int) * regfilesize);
-	//instMemory = (struct Instruction**)malloc(sizeof(struct Instruction*) * instmemsize);
 
 	// Allocate first listing of block list
 	first_block = (struct Instn_Block_Listing*)calloc(1, sizeof(struct Instn_Block_Listing));
@@ -307,7 +288,6 @@ void free_instn_memory() {
 void destroymem() {
 	free(stack);
 	free(regfile);
-	//free(instMemory);
 	free_instn_memory();
 	sp = -1;
 	pc = 0;

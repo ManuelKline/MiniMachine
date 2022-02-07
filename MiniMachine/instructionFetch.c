@@ -7,7 +7,7 @@ static FILE* fp;
 
 // Append function for strings, returns a string with appended character
 // Should probably add this to a separate file, since it is becoming useful
-char* append_if(char* dest, char newchar) {
+char* append_f(char* dest, char newchar) {
 	char* temp = NULL;		// Temp char* to hold new string
 	int newLength = 0;
 
@@ -23,16 +23,12 @@ char* append_if(char* dest, char newchar) {
 
 		// Copy contents of old string into new string
 		for (unsigned int i = 0; i < strlen(dest); i++) {
-			//printf("Loop 1 index %d, character %c\n", i, dest[i]);
 			temp[i] = dest[i];
 		}
 
-		//printf("Current temp: %s\n", temp);
 		// Append new character
 		temp[newLength - 1] = newchar;
-
-		//printf("Current temp: %s\n", temp);
-
+		
 		return temp;
 	}
 	else {
@@ -45,7 +41,6 @@ char* append_if(char* dest, char newchar) {
 		}
 
 		temp[0] = newchar;
-		//printf("Current temp: %s\n", temp);
 
 		return temp;
 	}
@@ -61,14 +56,10 @@ int getline(char** lineptr, FILE* stream) {
 		return -1;
 	}
 
-	//printf("getline: arguments valid\n");
-
 	// If necessary, allocate memory for single character
 	if (*lineptr == NULL) {
-		//printf("getline: lineptr null, calloc\n");
 		// Don't allocate space, but allow for reallocation
 		*lineptr = (char*)calloc(1, 1);
-		//printf("getline: calloc done\n");
 	}
 
 	// Get the first character
@@ -80,7 +71,7 @@ int getline(char** lineptr, FILE* stream) {
 
 	// This loop generates the full line
 	while (data != EOF && data != '\n') {
-		*lineptr = append_if(*lineptr, data);
+		*lineptr = append_f(*lineptr, data);
 		if (*lineptr == NULL) {
 			printf("Error in getline: append returned null pointer\n");
 			return -1;
