@@ -158,7 +158,7 @@
     <ClInclude Include="wordmatch.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="example.txt" />
+    <None Include="example.asm" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

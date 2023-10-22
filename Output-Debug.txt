@@ -1,0 +1,13 @@
+﻿'MiniMachine.exe' (Win32): Loaded 'C:\Users\JST\source\repos\MiniMachine\Debug\MiniMachine.exe'. Symbols loaded.
+'MiniMachine.exe' (Win32): Loaded 'C:\Windows\SysWOW64\ntdll.dll'. 
+'MiniMachine.exe' (Win32): Loaded 'C:\Windows\SysWOW64\kernel32.dll'. 
+'MiniMachine.exe' (Win32): Loaded 'C:\Windows\SysWOW64\KernelBase.dll'. 
+'MiniMachine.exe' (Win32): Loaded 'C:\Windows\SysWOW64\vcruntime140d.dll'. 
+'MiniMachine.exe' (Win32): Loaded 'C:\Windows\SysWOW64\ucrtbased.dll'. 
+The thread 0x258 has exited with code 0 (0x0).
+'MiniMachine.exe' (Win32): Loaded 'C:\Windows\SysWOW64\kernel.appcore.dll'. 
+'MiniMachine.exe' (Win32): Loaded 'C:\Windows\SysWOW64\msvcrt.dll'. 
+'MiniMachine.exe' (Win32): Loaded 'C:\Windows\SysWOW64\rpcrt4.dll'. 
+The thread 0x397c has exited with code 0 (0x0).
+The thread 0x40e4 has exited with code 0 (0x0).
+The program '[10716] MiniMachine.exe' has exited with code 0 (0x0).

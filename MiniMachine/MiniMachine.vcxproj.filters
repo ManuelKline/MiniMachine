@@ -64,7 +64,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="example.txt">
+    <None Include="example.asm">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>
