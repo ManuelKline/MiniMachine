@@ -35,6 +35,11 @@ struct InstructionWord movop_words[] = {
 	{TYPE_MOV, "MOV"}
 };
 
+struct InstructionWord memop_words[] = {
+	{TYPE_LDR, "LDR"},
+	{TYPE_STR, "STR"}
+};
+
 // Summary of all instructions
 
 struct InstructionWordSection allwords[] = {
@@ -42,9 +47,10 @@ struct InstructionWordSection allwords[] = {
 	{BRCOP_START, BRCOP_END, BRCOP_SIZE, branchop_words},
 	{STKOP_START, STKOP_END, STKOP_SIZE, stackop_words},
 	{ALUOP_START, ALUOP_END, ALUOP_SIZE, aluop_words},
-	{MOVOP_START, MOVOP_END, MOVOP_SIZE, movop_words}
+	{MOVOP_START, MOVOP_END, MOVOP_SIZE, movop_words},
+	{MEMOP_START, MEMOP_END, MEMOP_SIZE, memop_words}
 };
-const int numberofsections = 5;
+const int numberofsections = 6;
 
 // Handy macro I found: https://stackoverflow.com/questions/37538/how-do-i-determine-the-size-of-my-array-in-c
 #define ARRAYSIZE(x)	(sizeof(x) / sizeof((x)[0]))

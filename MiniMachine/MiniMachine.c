@@ -26,7 +26,7 @@ int main()
     loadinstructionset_full();
 
     // Fetch instructions
-    open_file_read("example.txt");
+    open_file_read("example.asm");
     while (1) {
         instn_line = fetchinstruction();
         if (instn_line == NULL) {

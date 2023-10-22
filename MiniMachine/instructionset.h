@@ -35,6 +35,14 @@
 #define STKOP_END			29
 #define STKOP_SIZE			2
 
+// Memory instructions, 30-99 reserved, utilizes simulated (virtual?) RAM array
+#define TYPE_LDR			30
+#define TYPE_STR			31
+
+#define MEMOP_START			30
+#define MEMOP_END			99
+#define MEMOP_SIZE			2
+
 // Arithmetic Operations, 100-199 reserved, registers only (for now)
 #define TYPE_ADD			100	// Add RegDest Reg1 Reg2 (that is, let RegDest = Reg1 +  Reg2)
 #define TYPE_SUB			101	// Same thing but subtract

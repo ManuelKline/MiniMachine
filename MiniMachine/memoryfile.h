@@ -5,6 +5,8 @@
 
 void push(int data);
 int pop();
+void store(unsigned int data, unsigned int address);
+unsigned int load(unsigned int address);
 void step();
 void setpc(int location);
 void addpc(int branch);

@@ -4,11 +4,16 @@
 
 #define INSTN_BLOCKSIZE_DEFAULT 4;				// Recommend 2048
 #define STACK_SIZE_DEFAULT 2048;
+#define DATA_MEM_SIZE_DEFAULT 8192;
 
 // ***** Stack *****
-static int* stack = NULL;
-static int mem_stacksize = STACK_SIZE_DEFAULT;	
+static unsigned int* stack = NULL;
+static unsigned int mem_stacksize = STACK_SIZE_DEFAULT;
 static int sp = -1;								// Stack pointer
+
+// ***** RAM (data memory) *****
+static unsigned int* data_mem = NULL;
+static unsigned int data_memsize = DATA_MEM_SIZE_DEFAULT;
 
 // ***** Register File *****
 static int* regfile = NULL;
@@ -27,7 +32,7 @@ static int pc = 0;
 static int initialized = 0;
 
 // Stack push
-void push(int data) {
+void push(unsigned int data) {
 	sp++;
 	if (sp < mem_stacksize) {
 		stack[sp] = data;
@@ -40,7 +45,7 @@ void push(int data) {
 
 // Stack pop
 int pop() {
-	int data = 0;
+	unsigned int data = 0;
 	
 	if (sp > -1) {
 		data = stack[sp];
@@ -52,6 +57,22 @@ int pop() {
 	}
 
 	return data;
+}
+
+void store(unsigned int data, unsigned int address) {
+	if (address > data_memsize) {
+		return;
+	}
+
+	data_mem[address] = data;
+}
+
+unsigned int load(unsigned int address) {
+	if (address > data_memsize) {
+		return;
+	}
+
+	return data_mem[address];
 }
 
 // Instruction step++
@@ -245,7 +266,8 @@ void initialize(unsigned int stacksize, unsigned int regfilesize) {
 	mem_regfilesize = regfilesize;
 
 	// Allocate to stack and register files as arrays of ints
-	stack = (int*)malloc(sizeof(int) * stacksize);
+	stack = (unsigned int*)malloc(sizeof(int) * stacksize);
+	data_mem = (unsigned int*)malloc(sizeof(int) * data_memsize);
 	regfile = (int*)malloc(sizeof(int) * regfilesize);
 
 	// Allocate first listing of block list
@@ -287,6 +309,7 @@ void free_instn_memory() {
 // Free static variables, set everything to empty
 void destroymem() {
 	free(stack);
+	free(data_mem);
 	free(regfile);
 	free_instn_memory();
 	sp = -1;

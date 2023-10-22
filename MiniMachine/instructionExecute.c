@@ -172,6 +172,42 @@ void instrn_mov(struct Argument arg1, struct Argument arg2) {
 	setreg(arg1.value_primary, arg_extract(&arg2));
 }
 
+// MEMORY INSTRUCTIONS
+
+// Destination (arg1) must be register
+// Source must be immediate (address)
+// Yes, very simplified version of LDR
+void instrn_ldr(struct Argument arg1, struct Argument arg2) {
+	if (arg1.type != ARG_REG) {
+		printf("Error in instrn_ldr: destination is not a register\n");
+		exit(1);
+	}
+
+	if (arg2.type != ARG_IMM) {
+		printf("Error in instrn_ldr: address is not an immediate\n");
+		exit(1);
+	}
+
+	setreg(arg1.value_primary, load((unsigned int)arg_extract(&arg2)));
+}
+
+// Source (arg1) must be register
+// Destination must be immediate (address)
+// Yes, very simplified version of STR
+void instrn_str(struct Argument arg1, struct Argument arg2) {
+	if (arg1.type != ARG_REG) {
+		printf("Error in instrn_str: destination is not a register\n");
+		exit(1);
+	}
+
+	if (arg2.type != ARG_IMM) {
+		printf("Error in instrn_str: address is not an immediate\n");
+		exit(1);
+	}
+
+	store((unsigned int)arg_extract(&arg1), ((unsigned int)arg_extract(&arg2)));
+}
+
 // Rudimentary switching functions:
 // I'll probably replace these with something more efficient
 // Bitwise comparisons and hashmaps come to mind
@@ -278,6 +314,23 @@ void execute_move_type(struct Instruction* instrn) {
 	}
 }
 
+void execute_mem_type(struct Instruction* instrn) {
+
+	switch (instrn->type)
+	{
+	case TYPE_LDR:
+		instrn_ldr(instrn->args[0], instrn->args[1]);
+		break;
+	case TYPE_STR:
+		instrn_str(instrn->args[0], instrn->args[1]);
+		break;
+	default:
+		printf("Instruction not found in execution\n");
+		exit(1);
+		break;
+	}
+}
+
 int filter_type(struct Instruction* instrn) {
 	if (instrn == NULL) {
 		return 1;
@@ -299,6 +352,9 @@ int filter_type(struct Instruction* instrn) {
 	}
 	else if (type >= MOVOP_START && type <= MOVOP_END) {
 		execute_move_type(instrn);
+	}
+	else if (type >= MEMOP_START && type <= MEMOP_END) {
+		execute_mem_type(instrn);
 	}
 	else {
 		printf("Warning: instruction type fits no category!\n");
